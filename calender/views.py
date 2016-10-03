@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from calender.authhelper import get_signin_url, get_token_from_code
 from calender.outlookservice import get_me
 from calender.authhelper import get_signin_url, get_token_from_code, get_access_token
-from calender.outlookservice import get_my_events
+from calender.outlookservice import get_my_events, create_event
 from django.shortcuts import render_to_response
 from django.template import Context
 
@@ -57,6 +57,17 @@ def home(request):
     sign_in_url = get_signin_url(redirect_uri)
     c = Context({'sign_in_url': sign_in_url})
     return render(request, 'calender/index.html' , c)
+
+def create_event_view(request):
+    access_token = get_access_token(request, request.build_absolute_uri(reverse('calender:gettoken')))
+    user_email = request.session['user_email']
+
+    if not access_token:
+        return HttpResponseRedirect(reverse('calender:home'))
+    else:
+        create_event_view = create_event(access_token, user_email)
+        c =  Context({'status_code' : create_event_view})
+        return render(request, 'calender/createEvents.html', c)
 
 
 

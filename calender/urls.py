@@ -11,5 +11,5 @@ urlpatterns = [
     # Events view ('/tutorial/events/')
     url(r'^events/$', views.events, name='events'),
     # url(r'^maps/$', views.maps, name='maps'),
-
+    url(r'^CreateEvent/$', views.create_event_view, name='createEvent'),
 ]

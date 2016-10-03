@@ -57,6 +57,10 @@ def get_my_events(access_token, user_email):
     #  - Only first 10 results returned
     #  - Only return the Subject, Start, and End fields
     #  - Sort the results by the Start field in ascending order
+    # query_parameters = {'$top': '10',
+    #                     '$select': 'Subject',
+    #                    }
+    #
     query_parameters = {'$top': '10',
                         '$select': 'Subject,Start,End',
                         '$orderby': 'Start/DateTime ASC'}
@@ -67,3 +71,42 @@ def get_my_events(access_token, user_email):
         return r.json()
     else:
         return "{0}: {1}".format(r.status_code, r.text)
+
+def create_event(access_token, user_email):
+    # dratnaras@itrsgroup.onmicrosoft.com
+
+    get_create_events_url = outlook_api_endpoint.format('/me/events')
+    data ={
+        'Subject': 'Discuss the Calendar REST API',
+        'Body': {
+            "ContentType": "HTML",
+            'Content': 'I think it will meet our requirements!'
+        },
+        'Start': {
+            'DateTime': '2017-02-02T18:00:00',
+            'TimeZone': 'Pacific Standard Time'
+        },
+        'End': {
+            'DateTime': '2017-02-02T19:00:00',
+            'TimeZone': 'Pacific Standard Time'
+        },
+        'Attendees': [
+            {
+                'EmailAddress': {
+                    'Address': 'janets@a830edad9050849NDA1.onmicrosoft.com',
+                    'Name': 'Janet Schorr'
+                },
+                'Type': 'Required'
+            }
+        ]
+    }
+
+    r = make_api_call('POST', get_create_events_url, access_token, user_email, payload = data)
+
+    if (r.status_code == requests.codes.ok):
+        return r.json()
+    else:
+        return "{0}: {1}".format(r.status_code, r.text)
+
+
+
