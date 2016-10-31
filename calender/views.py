@@ -19,6 +19,12 @@ import time
 #     return HttpResponse('<a href="' + sign_in_url +'">Click here to sign in and view your mail</a>')
 
 
+def home(request):
+    redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
+    sign_in_url = get_signin_url(redirect_uri)
+    c = Context({'sign_in_url': sign_in_url})
+    return render(request, 'calender/index.html' , c)
+
 def gettoken(request):
     auth_code = request.GET['code']
     redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
@@ -52,15 +58,26 @@ def events(request):
         context = { 'events': events['value'] }
         return render(request, 'calender/events.html', context)
 
-def home(request):
-    redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
-    sign_in_url = get_signin_url(redirect_uri)
-    c = Context({'sign_in_url': sign_in_url})
-    return render(request, 'calender/index.html' , c)
+def create_event_view(request):
+    access_token = get_access_token(request, request.build_absolute_uri(reverse('calender:gettoken')))
+    user_email = request.session['user_email']
+
+    if not access_token:
+        return HttpResponseRedirect(reverse('calender:home'))
+    else:
+        create_event_view = create_event(access_token, user_email)
+        c =  Context({'status_code' : create_event_view})
+        return render(request, 'calender/createEvents.html', c)
+
+def schedule(request):
+    return render(request, 'calender/calender.html')
 
 
+# def dashboard(request):
+#     return render(request, 'calender/dashboardTest.html')
 
+def dashboard(request):
+    return render(request, 'calender/dashboard_base.html')
 
-
-
-
+def clientBooking(request):
+    return render(request, 'calender/client_booking.html')
