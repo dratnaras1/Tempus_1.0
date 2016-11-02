@@ -8,12 +8,11 @@ from calender.authhelper import get_signin_url, get_token_from_code, get_access_
 from calender.outlookservice import get_my_events
 from django.shortcuts import render_to_response
 from django.template import Context
-
+from django.template import Template
 
 from .forms import ClientAppointmentForm
 
 import time
-
 
 # Create your views here.
 # def home(request):
@@ -104,10 +103,16 @@ def clientBooking(request):
             if not access_token:
                 return HttpResponseRedirect(reverse('calender:home'))
             else:
+                # dateTime = date+"T"+time+":00"
                 response = create_appointment(access_token, user_email, date, time, email, name)
                 c =  Context({'status_code' : response})
                 return HttpResponse(c)
-                # return (request, 'calender/createEvents.html', c)
+
+                # Test
+
+                # context = Context({"dateTime_test": dateTime})
+                # return HttpResponse(context)
+
     # if a GET (or any other method) we'll create a blank form
     else:
         form = ClientAppointmentForm()
