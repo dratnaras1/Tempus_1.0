@@ -3,11 +3,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from calender.authhelper import get_signin_url, get_token_from_code
 from calender.outlookservice import get_me
+from calender.outlookservice import create_appointment
 from calender.authhelper import get_signin_url, get_token_from_code, get_access_token
 from calender.outlookservice import get_my_events
 from django.shortcuts import render_to_response
 from django.template import Context
 
+
+from .forms import ClientAppointmentForm
 
 import time
 
@@ -79,5 +82,34 @@ def schedule(request):
 def dashboard(request):
     return render(request, 'calender/dashboard_base.html')
 
+# def clientBooking(request):
+#     return render(request, 'calender/client_booking.html')
+
 def clientBooking(request):
-    return render(request, 'calender/client_booking.html')
+    access_token = get_access_token(request, request.build_absolute_uri(reverse('calender:gettoken')))
+    user_email = request.session['user_email']
+
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = ClientAppointmentForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            date = form.cleaned_data['date']
+            time = form.cleaned_data['time']
+            if not access_token:
+                return HttpResponseRedirect(reverse('calender:home'))
+            else:
+                response = create_appointment(access_token, user_email, date, time, email, name)
+                c =  Context({'status_code' : response})
+                return HttpResponse(c)
+                # return (request, 'calender/createEvents.html', c)
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = ClientAppointmentForm()
+
+    return render(request, 'calender/client_booking.html', {'form': form})

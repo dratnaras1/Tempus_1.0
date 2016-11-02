@@ -67,3 +67,41 @@ def get_my_events(access_token, user_email):
         return r.json()
     else:
         return "{0}: {1}".format(r.status_code, r.text)
+
+def create_appointment(access_token, user_email, date, time, email, name):
+    get_events_url = outlook_api_endpoint.format('/Me/events')
+    # dateTime = date+"T"+time+":00"
+
+
+    data= {
+        "Subject": "Site Visit",
+        "Body": {
+            "ContentType": "HTML",
+            "Content": "I think it will meet our requirements!"
+        },
+        "Start": {
+            "DateTime": "2014-02-02T19:00:00",
+            "TimeZone": "Pacific Standard Time"
+        },
+        "End": {
+            "DateTime": "2014-02-02T19:00:00",
+            "TimeZone": "Pacific Standard Time"
+        },
+        "Attendees": [
+            {
+                "EmailAddress": {
+                    "Address": email,
+                    "Name": name
+                },
+                "Type": "Required"
+            }
+        ]
+    }
+
+    r = make_api_call('POST',get_events_url, access_token, user_email, payload=data)
+
+    if (r.status_code == requests.codes.ok):
+        return r.json()
+    else:
+        return "{0}: {1}".format(r.status_code, r.text)
+

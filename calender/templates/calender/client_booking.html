@@ -26,35 +26,41 @@
 
 <body>
 
-    <div class = "form-group">
-        <form>
-            <label> Name </label>
-            <input type ="text"  name="clientName" id="clientName">
-        </form>
-    </div>
-    <div class = "form-group">
-        <form>
-            <label> email </label>
-            <input type ="text" name="clientEmail" id="clientEmail">
-        </form>
-    </div>
-    <div class="form-group" id="pick date">
-        <form id="pickDateForm">
-            <label> Date </label>
-            <input type ="text" name="appointmentDate" id="appointmentDate">
-        </form>
-    </div>
+    <!--<div class = "form-group">-->
+        <!--<form>-->
+            <!--<label> Name </label>-->
+            <!--<input type ="text"  name="clientName" id="clientName">-->
+        <!--</form>-->
+    <!--</div>-->
+    <!--<div class = "form-group">-->
+        <!--<form>-->
+            <!--<label> email </label>-->
+            <!--<input type ="text" name="clientEmail" id="clientEmail">-->
+        <!--</form>-->
+    <!--</div>-->
+    <!--<div class="form-group" id="pick date">-->
+        <!--<form id="pickDateForm">-->
+            <!--<label> Date </label>-->
+            <!--<input type ="text" name="appointmentDate" id="appointmentDate">-->
+        <!--</form>-->
+    <!--</div>-->
 
-    <div class="form-group" id ="pick time">
-        <form id="pickTimeForm">
-            <label>Time</label>
-            <input type="text" name="appointmentTime" id="appointmentTime">
-        </form>
-    </div>
+    <!--<div class="form-group" id ="pick time">-->
+        <!--<form id="pickTimeForm">-->
+            <!--<label>Time</label>-->
+            <!--<input type="text" name="appointmentTime" id="appointmentTime">-->
+        <!--</form>-->
+    <!--</div>-->
 
-    <div class="checkbox">
-        <button type="submit" class="btn btn-default">Submit</button>
-    </div>
+    <!--<div class="checkbox">-->
+        <!--<button type="submit" class="btn btn-default">Submit</button>-->
+    <!--</div>-->
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit" />
+    </form>
 
 </body>
 
@@ -63,15 +69,21 @@
 
 <script>
     $(document).ready(function() {
-        $('#appointmentDate').pickadate({
+        $('#id_date').pickadate({
             format: 'dd/mm/yyyy',
-            formatSubmit: 'dd/mm/yyyy',
-            disable: [1,7]
+            altFormat: "yyyy-mm-dd",
+            formatSubmit: 'yyyy-mm-dd',
+            disable: [1,7],
+            hiddenSuffix: ''
 
         });
-        $('#appointmentTime').pickatime({
+
+
+
+        $('#id_time').pickatime({
             min: [9,00],
-            max: [17,00]
+            max: [17,00],
+            format: 'H:i'
         });
     });
 
