@@ -37,6 +37,19 @@ def get_signin_url(redirect_uri):
 
     return signin_url
 
+def get_auth_code(redirect_uri):
+    # // Line breaks for legibility only
+    params = { 'client_id': client_id,
+               'response_type': 'code',
+               'redirect_uri': redirect_uri,
+               'response_mode': 'query',
+               'scope': ' '.join(str(i) for i in scopes),
+               'state': '12345'
+    }
+
+
+
+
 def get_token_from_code(auth_code, redirect_uri):
     # Build the post form for the token request
     post_data = { 'grant_type': 'authorization_code',
@@ -99,4 +112,17 @@ def get_access_token(request, redirect_uri):
         request.session['token_expires'] = expiration
 
         return new_tokens['access_token']
+
+def get_temp_access_token(request, redirect_uri):
+    current_token = request.session['access_token']
+    expiration = request.session['token_expires']
+    now = int(time.time())
+    expiration = now + 1
+    # now = int(time.time())
+    if (current_token and now < expiration):
+        # Token still valid
+        return current_token
+    else:
+
+        return 'Token expiered: {0} - {1}'
 

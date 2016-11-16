@@ -72,18 +72,18 @@ def create_appointment(access_token, user_email, date, time, email, name):
     get_events_url = outlook_api_endpoint.format('/Me/events')
     dateTime = date+"T"+time+":00"
     data= {
-        "Subject": "Discuss the Calendar REST API",
+        "Subject": "Site Visit",
         "Body": {
             "ContentType": "HTML",
-            "Content": "I think it will meet our requirements!"
+            "Content": "ITRS site visit"
         },
         "Start": {
             "DateTime": dateTime,
-            "TimeZone": "Pacific Standard Time"
+            "TimeZone": "GMT Standard Time"
         },
         "End": {
             "DateTime": dateTime,
-            "TimeZone": "Pacific Standard Time"
+            "TimeZone": "GMT Standard Time"
         },
         "Attendees": [
             {

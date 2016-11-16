@@ -8,6 +8,8 @@ urlpatterns = [
     url(r'^home/$', views.home, name='home'),
     # Redirect to get token ('/calender/gettoken/')
     url(r'^gettoken/$', views.gettoken, name='gettoken'),
+    # Redirect to get temporary token ('/calender/gettoken/')
+    url(r'^gettemptoken/$', views.gettempttoken, name='gettemptoken'),
     # Events view ('/calender/events/')
     url(r'^events/$', views.events, name='events'),
     # url(r'^maps/$', views.maps, name='maps'),

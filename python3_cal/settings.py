@@ -74,12 +74,29 @@ WSGI_APPLICATION = 'python3_cal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'tempus',
+        'USER': 'user',
+        'PASSWORD': 'password',
+        }
 }
+
+
+
+# DATABASES = {
+#     'default' : {
+#         'ENGINE' : 'django_mongodb_engine',
+#         'NAME' : 'tempus_database'
+#     }
+# }
 
 
 # Password validation
@@ -119,3 +136,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Mail settings
+# EMAIL_HOST='outlook.hostedservice2.net'
+# EMAIL_HOST_USER='dratnaras@itrsgroup.com'
+# EMAIL_HOST_PASSWORD='MAthu2510'
+# EMAIL_USE_TLS= True
+
+# EMAIL_HOST='192.168.1.133'
+# EMAIL_HOST_USER='dratnaras'
+# EMAIL_HOST_PASSWORD='ipods'
+# EMAIL_PORT='25'
+# EMAIL_USE_TLS= True
+
+EMAIL_HOST='smtp.office365.com'
+EMAIL_HOST_USER='dratnaras@itrsgroup.onmicrosoft.com'
+EMAIL_HOST_PASSWORD='MAthu2510'
+EMAIL_PORT='587'
+EMAIL_USE_TLS= True
