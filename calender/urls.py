@@ -20,6 +20,6 @@ urlpatterns = [
     # dashboard view ('/caldender/dashboard')
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     # client booking view ('/caldender/booking')
-    url(r'^booking/$', views.clientBooking, name='dashboard')
+    url(r'^booking/$', views.clientBooking, name='clientBooking')
 ]
 

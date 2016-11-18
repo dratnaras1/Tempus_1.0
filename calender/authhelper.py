@@ -3,7 +3,7 @@ import base64
 import json
 import time
 import requests
-
+import requests.auth
 # Client ID and secret
 client_id = '3430cc6b-3534-4d88-ac72-2f12820b3fe1'
 client_secret = 'MsSJiuPMakQ0sieWFen99YQ'
@@ -125,4 +125,19 @@ def get_temp_access_token(request, redirect_uri):
     else:
 
         return 'Token expiered: {0} - {1}'
+
+def get_access_token_from_auth(code, redirect_uri):
+
+    client_auth = requests.auth.HTTPBasicAuth(client_id, client_secret)
+    post_data = { 'grant_type': 'authorization_code',
+                  'code': code,
+                  'redirect_uri': redirect_uri,
+                  'scope': ' '.join(str(i) for i in scopes),
+                  'client_id': client_id,
+                  'client_secret': client_secret
+              }
+    response = requests.post(token_url, data=post_data)
+    token_json = response.json()
+    return token_json["access_token"]
+
 
