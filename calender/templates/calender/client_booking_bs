@@ -1,0 +1,266 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tempus</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+    <link rel="stylesheet" href="{% static 'calender/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'calender/form-bootstrap/assets/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'calender/form-bootstrap/assets/css/form-elements.css' %}">
+    <link rel="stylesheet" href="{% static 'calender/form-bootstrap/assets/css/style.css' %}">
+
+    <!--jdatepicker css-->
+    <link rel="stylesheet" href="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/themes/default.css' %}">
+    <link rel="stylesheet" href="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/themes/default.date.css' %}">
+    <link rel="stylesheet" href="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/themes/default.time.css' %}">
+
+    <!--JDatePicker-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+
+    <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.date.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.time.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/legacy.js' %}" type="text/javascript" charset="utf-8"></script>
+
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]-->
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <!--[endif]-->
+
+
+
+    <!-- Favicon and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static 'calender/form-bootstrap/assets/ico/apple-touch-icon-144-precomposed.png' %}">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static 'calender/form-bootstrap/assets/ico/apple-touch-icon-114-precomposed.png' %}">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static 'calender/form-bootstrap/assets/ico/apple-touch-icon-72-precomposed.png' %}">
+    <link rel="apple-touch-icon-precomposed" href="{% static 'calender/form-bootstrap/assets/ico/apple-touch-icon-57-precomposed.png' %}">
+
+</head>
+
+<body background="{% static 'calender/form-bootstrap/assets/img/backgrounds/1.jpg' %}">
+
+<!-- Top menu -->
+<nav class="navbar navbar-inverse navbar-no-bg" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!--<a class="navbar-brand" href="index.html">BootZard - Bootstrap Wizard Template</a>-->
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!--<div class="collapse navbar-collapse" id="top-navbar-1">-->
+            <!--<ul class="nav navbar-nav navbar-right">-->
+                <!--<li>-->
+							<!--<span class="li-text">-->
+								<!--Put some text or-->
+							<!--</span>-->
+                    <!--<a href="#"><strong>links</strong></a>-->
+                    <!--<span class="li-text">-->
+								<!--here, or some icons:-->
+							<!--</span>-->
+                    <!--<&lt;!&ndash; span class="li-social">-->
+								<!--<a href="https://www.facebook.com/pages/Azmindcom/196582707093191" target="_blank"><i class="fa fa-facebook"></i></a>-->
+								<!--<a href="https://twitter.com/anli_zaimi" target="_blank"><i class="fa fa-twitter"></i></a>-->
+								<!--<a href="https://plus.google.com/+AnliZaimi_azmind" target="_blank"><i class="fa fa-google-plus"></i></a>-->
+								<!--<a href="https://github.com/AZMIND" target="_blank"><i class="fa fa-github"></i></a>-->
+							<!--</span> &ndash;&gt;-->
+                <!--</li>-->
+            <!--</ul>-->
+        <!--</div>-->
+    </div>
+</nav>
+
+<!-- Top content -->
+<div class="top-content">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2 text">
+                <h1>ITRS <strong>TEMPUS</strong></h1>
+                <div class="description">
+                    <!--<p>-->
+                        <!--This is a free responsive Bootstrap form wizard.-->
+                        <!--Download it on <a href="http://azmind.com"><strong>AZMIND</strong></a>, customize and use it as you like!-->
+                    <!--</p>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 form-box">
+                <form role="form" action="" method="post" class="f1">
+
+                    <h3>TEMPUS Client Booking Page</h3>
+                    <p>Please fill in the fields to book an appointment</p>
+                    <div class="f1-steps">
+                        <div class="f1-progress">
+                            <div class="f1-progress-line" data-now-value="16.66" data-number-of-steps="2" style="width: 16.66%;"></div>
+                        </div>
+                        <div class="f1-step active">
+                            <div class="f1-step-icon"><i class="fa fa-user"></i></div>
+                            <p>about</p>
+                        </div>
+                        <div class="f1-step">
+                            <div class="f1-step-icon"><i class="fa fa-key"></i></div>
+                            <p>Date</p>
+                        </div>
+                        <!--<div class="f1-step">-->
+                             <!--<div class="f1-step-icon"><i class="fa fa-twitter"></i></div>-->
+                             <!--<p>social</p>-->
+                         <!--</div>-->
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <fieldset>
+                            <h4>Tell us who you are:</h4>
+                            <div class="form-group">
+                                <!--{{ form.form }}-->
+                                <label class="sr-only" for="{{ form.name.label }}">Name</label>
+                                {{ form.name}}
+                                <!--<input type="text" name="f1-first-name" placeholder="First name..." class="f1-first-name form-control" id="f1-first-name">-->
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="{{ form.email.label }}">Email</label>
+                                {{ form.email}}
+                                <!--<input type="text" name="f1-last-name" placeholder="Last name..." class="f1-last-name form-control" id="f1-last-name">-->
+
+                            </div>
+                            <!--<div class="form-group">-->
+                                <!--<label class="sr-only" for="f1-about-yourself">About yourself</label>-->
+                                <!--<textarea name="f1-about-yourself" placeholder="About yourself..."-->
+                                          <!--class="f1-about-yourself form-control" id="f1-about-yourself"></textarea>-->
+                            <!--</div>-->
+                            <div class="f1-buttons">
+                                <button type="button" class="btn btn-next">Next</button>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <h4>Enter your preferred date and time:</h4>
+                            <div class="form-group">
+                                <label class="sr-only" for={{form.date.label}}>Date</label>
+                                <!--<input type="text" name="f1-email" placeholder="Email..." class="f1-email form-control" id="f1-email">-->
+                                {{form.date}}
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for={{form.date.time}}>Time</label>
+                                <!--<input type="password" name="f1-password" placeholder="Password..." class="f1-password form-control" id="f1-password">-->
+                                {{form.time}}
+                            </div>
+                            <!--<div class="f1-buttons">-->
+                                <!--&lt;!&ndash;<button type="button" class="btn btn-next">Submit</button>&ndash;&gt;-->
+                                <!--<input type="submit" value="Submit" class="btn btn-next" button type="button"/>-->
+                            <!--</div>-->
+
+                            <!--<div class="form-group">-->
+                                <!--<label class="sr-only" for="f1-repeat-password">Repeat password</label>-->
+                                <!--<input type="password" name="f1-repeat-password" placeholder="Repeat password..."-->
+                                       <!--class="f1-repeat-password form-control" id="f1-repeat-password">-->
+                            <!--</div>-->
+                            <div class="f1-buttons">
+                                <button type="button" class="btn btn-previous">Previous</button>
+                                <!--<button type="button" class="btn btn-next">Next</button>-->
+                                <button type="submit" class="btn btn-submit">Submit</button>
+                            </div>
+                        </fieldset>
+
+                     <!--<fieldset>-->
+                         <!--<h4>Confirm:</h4>-->
+                         <!--<div class="form-group">-->
+                             <!--<label class="sr-only" for="f1-facebook">Facebook</label>-->
+                             <!--<input type="text" name="f1-facebook" placeholder="Facebook..." class="f1-facebook form-control" id="f1-facebook">-->
+                         <!--</div>-->
+                         <!--<div class="form-group">-->
+                             <!--<label class="sr-only" for="f1-twitter">Twitter</label>-->
+                             <!--<input type="text" name="f1-twitter" placeholder="Twitter..." class="f1-twitter form-control" id="f1-twitter">-->
+                         <!--</div>-->
+                         <!--<div class="form-group">-->
+                             <!--<label class="sr-only" for="f1-google-plus">Google plus</label>-->
+                             <!--<input type="text" name="f1-google-plus" placeholder="Google plus..." class="f1-google-plus form-control" id="f1-google-plus">-->
+                         <!--</div>-->
+                         <!--<div class="f1-buttons">-->
+                             <!--<button type="button" class="btn btn-previous">Previous</button>-->
+                             <!--<button type="submit" class="btn btn-submit">Submit</button>-->
+                         <!--</div>-->
+                     <!--</fieldset>-->
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Javascript -->
+<!--jpicker-->
+<script>
+
+    $(document).ready(function() {
+        $('#f1-Date').pickadate({
+            format: 'dd/mm/yyyy',
+            altFormat: "yyyy-mm-dd",
+            formatSubmit: 'yyyy-mm-dd',
+            disable: [1, 7],
+            hiddenSuffix: ''
+
+
+        });
+
+        $('#f1-Time').pickatime({
+            min: [9, 00],
+            max: [17, 00],
+            formatSubmit: 'H:i',
+            hiddenSuffix: ''
+        });
+
+    });
+
+
+</script>
+
+
+
+
+<!--<script src="{% static 'calender/form-bootstrap/assets/js/jquery-1.11.1.min.js' %}"></script>-->
+<script src="{% static 'calender/form-bootstrap/assets/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'calender/form-bootstrap/assets/js/jquery.backstretch.min.js' %}"></script>
+<script src="{% static 'calender/form-bootstrap/assets/js/retina-1.1.0.min.js' %}"></script>
+<script src="{% static 'calender/form-bootstrap/assets/js/scripts.js' %}"></script>
+
+<!--&lt;!&ndash;[if lt IE 10]>-->
+<!--<script src="{% static 'calender/form-bootstrap/assets/js/placeholder.js' %}"></script>-->
+<!--<![endif]&ndash;&gt;-->
+
+
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
+
+
+
+
+
+</body>
+
+
+</html>

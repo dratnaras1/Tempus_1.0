@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from calender.authhelper import get_signin_url, get_token_from_code, get_temp_access_token
 from calender.outlookservice import get_me
 from calender.outlookservice import create_appointment
-from calender.authhelper import get_signin_url, get_token_from_code, get_access_token, get_access_token_from_auth
+from calender.authhelper import get_signin_url, get_token_from_code, get_access_token, get_token_from_refresh_token
 from calender.outlookservice import get_my_events
 from django.shortcuts import render_to_response
 from django.template import Context
@@ -36,12 +36,6 @@ def home(request):
 def gettoken(request):
     auth_code = request.GET['code']
     # print("auth_code" + auth_code)
-    # create outlook object
-    oauth= OutlookAuth.objects.get(pk=1)
-    # oauth.user_email= user['EmailAddress']
-    if(oauth.auth_code != auth_code):
-        oauth.auth_code = auth_code
-        oauth.save()
 
     redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
     token = get_token_from_code(auth_code, redirect_uri)
@@ -49,6 +43,15 @@ def gettoken(request):
     user = get_me(access_token)
     refresh_token = token['refresh_token']
     expires_in = token['expires_in']
+
+    # create outlook object
+    oauth= OutlookAuth.objects.get(pk=1)
+    oauth.user_email= user['EmailAddress']
+    oauth.refresh_token = refresh_token
+    if(oauth.auth_code != auth_code):
+        oauth.auth_code = auth_code
+        oauth.save()
+
 
 
     # expires_in is in seconds
@@ -185,31 +188,28 @@ def clientBooking(request):
             email = form.cleaned_data['email']
             date = form.cleaned_data['date']
             time = form.cleaned_data['time']
-            # auth_code = 'OAQABAAAAAADRNYRQ3dhRSrm-4K-adpCJz1zjklby0bfXPoYDzVT0_TLiLV_ENiReaK9gZ3h3z5_J2-y6HRq-_aBV34_SiLMWT-lV64i4bBt8GM5dYzitZlhmetiPN5HXGEyUiPU8kaZghskfupLg8RltPgL-25Jq0B_bWUIKVBcwYQoWeFLyWSh24_1vdAf9nYcZ-FmZeL997GN5EQiKN43CoN0yGYCqbA20a0X0gpV9rX3PZSj90IGUed0F097VC31QrEEMULK-GFbqqEtV9XcFcNT1qfaupju1c7YcwfwCsa6iUk6XWEzorESAaA57fuTqoqhadXUALdCpSDArytqgTdjO-3NYHWtCB9RHWQCcCCa_IdJxU4wRSQHtRUUBcmzhgYOx-Q4BY-KLqLa1n_oEuiq7ggsAA0VydH_1n7vb52a3P_Y6PqJ6Pj4XeurULFHxuI11q9p6htaLP9hePlM5f7J6JavNYDKUN0Vk12vJJvh4sRA_5Iu44Z9rJJNkhyRTJo6Id3ITUX1NX60CAGWHPPgzQkdhyQbvBWzQUl9-nq4g5YVKJh4aSaim8cXcnY8ULVv13qUdBCoQD5B3Woi1K3vxrEfcf3IZpcCOBItVJfZb8hBg4rkkqiKmkvyDTfVBvhjqfVc1fFjoa8ihL1tT7EjlXQPY_EKoNvUTYjWWu8fGRMmMpWw8l1EtbazOfwW_HjfMwrn9rSsgeBYCejxhEIcShE6KzEirYbu3mdoVKO9NNDLZGAa0B6fSeK8ZFthBhzPPmWkmSukGUbdE-htvnrL2kKwXlOaM3qQzzMdt-8qr5Rs2i_HNBBQikPPsaJGszefnK0EewnulG4prUaKvkbIDzpjkIAA'
+
             oauth = OutlookAuth.objects.get(pk=1)
             auth_code = oauth.auth_code
-            # print("au" + auth_code)
-            # print("au_db" + oauth.auth_code)
-            # auth_code = OutlookAuth.objects.ge
-
+            rt = oauth.refresh_token
             redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
-            # token = get_token_from_code(auth_code, redirect_uri)
-            # access_token = token['access_token']
-            # print("token p" )
 
-            token = get_access_token_from_auth(auth_code, redirect_uri)
+
+            json = get_token_from_refresh_token(rt, redirect_uri)
+
+            token = json["access_token"]
 
             user_email = "dratnaras@itrsgroup.onmicrosoft.com"
             response = create_appointment(token, user_email, date, time, email, name)
 
             # send email to analyst
-            # send_mail(
-            #     'New Site Visit Booking',
-            #     name + ' has booked a new appointment with you on ' + date +' at ' +time,
-            #     'dratnaras@itrsgroup.onmicrosoft.com',
-            #     ['dratnaras@itrsgroup.com'],
-            #     fail_silently=False,
-            #  )
+            send_mail(
+                'New Site Visit Booking',
+                name + ' has booked a new appointment with you on ' + date +' at ' +time,
+                'dratnaras@itrsgroup.onmicrosoft.com',
+                ['dratnaras@itrsgroup.com'],
+                fail_silently=False,
+             )
 
             c =  Context({'status_code' : response })
 
@@ -219,13 +219,10 @@ def clientBooking(request):
             return HttpResponse(c)
 
 
-                # Test
-                # dateTime = date+"T"+time+":00"
-                # context = Context({"dateTime_test": dateTime})
-                # return HttpResponse(context)
 
     # if a GET (or any other method) we'll create a blank form
     else:
         form = ClientAppointmentForm()
 
-    return render(request, 'calender/client_booking.html', {'form': form})
+    # return render(request, 'calender/client_booking.html', {'form': form})
+    return render(request, 'calender/client_booking_bs', {'form': form})

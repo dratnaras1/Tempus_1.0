@@ -5,3 +5,4 @@ from django.db import models
 class OutlookAuth(models.Model):
     user_email = models.CharField(max_length = 254)
     auth_code = models.TextField()
+    refresh_token = models.TextField()
