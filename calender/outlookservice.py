@@ -50,14 +50,36 @@ def get_me(access_token):
     else:
         return "{0}: {1}".format(r.status_code, r.text)
 
-def get_my_events(access_token, user_email):
-    get_events_url = outlook_api_endpoint.format('/Me/Events')
+# def get_my_events(access_token, user_email):
+#     get_events_url = outlook_api_endpoint.format('/Me/Events')
+#
+#     # Use OData query parameters to control the results
+#     #  - Only first 10 results returned
+#     #  - Only return the Subject, Start, and End fields
+#     #  - Sort the results by the Start field in ascending order
+#     query_parameters = {'$top': '10',
+#                         '$select': 'Subject,Start,End',
+#                         '$orderby': 'Start/DateTime ASC'}
+#
+#     r = make_api_call('GET', get_events_url, access_token, user_email, parameters = query_parameters)
+#
+#     if (r.status_code == requests.codes.ok):
+#         return r.json()
+#     else:
+#         return "{0}: {1}".format(r.status_code, r.text)
+
+def get_events_by_range(access_token, user_email):
+    get_events_url = outlook_api_endpoint.format('/Me/calendarview')
 
     # Use OData query parameters to control the results
     #  - Only first 10 results returned
     #  - Only return the Subject, Start, and End fields
     #  - Sort the results by the Start field in ascending order
-    query_parameters = {'$top': '10',
+    start_datetime = '2016-11-04T09:00:00.0000000'
+    end_datetime = '2016-11-04T17:30:00.0000000'
+    query_parameters = {'$top': '2500',
+                        'StartDateTime' : start_datetime,
+                        'EndDateTime' : end_datetime,
                         '$select': 'Subject,Start,End',
                         '$orderby': 'Start/DateTime ASC'}
 

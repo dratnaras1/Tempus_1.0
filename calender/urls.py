@@ -21,6 +21,9 @@ urlpatterns = [
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     # client booking view ('/caldender/booking')
     # url(r'^booking/$', views.clientBooking, name='clientBooking')
-    url(r'^booking/$', views.clientBooking, name='clientBooking')
+    url(r'^booking/$', views.clientBooking, name='clientBooking'),
+    #Get avilable Times
+    url(r'^getTimes/$', views.getTimes, name='getTimes'),
+
 ]
 

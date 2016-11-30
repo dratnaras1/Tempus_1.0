@@ -5,7 +5,7 @@ from calender.authhelper import get_signin_url, get_token_from_code, get_temp_ac
 from calender.outlookservice import get_me
 from calender.outlookservice import create_appointment
 from calender.authhelper import get_signin_url, get_token_from_code, get_access_token, get_token_from_refresh_token
-from calender.outlookservice import get_my_events
+from calender.outlookservice import  get_events_by_range
 from django.shortcuts import render_to_response
 from django.template import Context
 from django.template import Template
@@ -17,9 +17,8 @@ from pytz import timezone
 from django.core.mail import EmailMessage
 from django.core.mail import send_mail
 from calender.models import OutlookAuth
-
 import time
-
+import json
 # Create your views here.
 # def home(request):
 #     redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
@@ -98,7 +97,9 @@ def events(request):
     if not access_token:
         return HttpResponseRedirect(reverse('calender:home'))
     else:
-        events = get_my_events(access_token, user_email)
+        # events = get_my_events(access_token, user_email)
+        events = get_events_by_range(access_token, user_email)
+        # context = { 'events': events['value'] }
         context = { 'events': events['value'] }
         return render(request, 'calender/events.html', context)
 
@@ -191,22 +192,22 @@ def clientBooking(request):
 
             oauth = OutlookAuth.objects.get(pk=1)
             auth_code = oauth.auth_code
+            user_email = oauth.user_email
             rt = oauth.refresh_token
             redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
 
 
             json = get_token_from_refresh_token(rt, redirect_uri)
-
             token = json["access_token"]
 
-            user_email = "dratnaras@itrsgroup.onmicrosoft.com"
+            # user_email = "dratnaras@itrsgroup.onmicrosoft.com"
             response = create_appointment(token, user_email, date, time, email, name)
 
             # send email to analyst
             send_mail(
                 'New Site Visit Booking',
                 name + ' has booked a new appointment with you on ' + date +' at ' +time,
-                'dratnaras@itrsgroup.onmicrosoft.com',
+                'tempus@itrsgroup.onmicrosoft.com',
                 ['dratnaras@itrsgroup.com'],
                 fail_silently=False,
              )
@@ -224,5 +225,20 @@ def clientBooking(request):
     else:
         form = ClientAppointmentForm()
 
-    # return render(request, 'calender/client_booking.html', {'form': form})
+    # time = [[13,0],[14,0]]
+
     return render(request, 'calender/client_booking_bs', {'form': form})
+    # return render(request, 'calender/client_booking_bs', {'form': form, 'time': time})
+
+def getTimes(request):
+    time = [[13,0],[14,0]]
+    some_data_to_dump = {
+        'time': time
+    }
+    data = json.dumps(some_data_to_dump)
+
+    selectedDate = request.GET['selectedDate']
+
+
+
+    return HttpResponse(data, content_type='application/json')
