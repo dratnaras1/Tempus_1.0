@@ -25,7 +25,7 @@ SECRET_KEY = 'e+hfgn6@yxn^b*g7&ol1^15=ke11_+z_(&^ne-yik&_(j7qd*&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['tempus.com', '192.168.10.129', 'localhost', 'tempus.itrsgroup.com']
 
 
 # Application definition
@@ -154,3 +154,5 @@ EMAIL_HOST_USER='dratnaras@itrsgroup.onmicrosoft.com'
 EMAIL_HOST_PASSWORD='MAthu2510'
 EMAIL_PORT='587'
 EMAIL_USE_TLS= True
+
+

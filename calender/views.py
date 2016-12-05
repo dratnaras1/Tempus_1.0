@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from calender.authhelper import get_signin_url, get_token_from_code, get_temp_access_token
-from calender.outlookservice import get_me
+from calender.outlookservice import get_me, get_events_by_range
 from calender.outlookservice import create_appointment
 from calender.authhelper import get_signin_url, get_token_from_code, get_access_token, get_token_from_refresh_token
 from calender.outlookservice import  get_events_by_range
@@ -19,6 +19,7 @@ from django.core.mail import send_mail
 from calender.models import OutlookAuth
 import time
 import json
+import re
 # Create your views here.
 # def home(request):
 #     redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
@@ -231,14 +232,68 @@ def clientBooking(request):
     # return render(request, 'calender/client_booking_bs', {'form': form, 'time': time})
 
 def getTimes(request):
-    time = [[13,0],[14,0]]
+
+
+    selectedDate = request.GET['selectedDate']
+    startTime = 'T09:00:00.0000000'
+    endTime = 'T17:30:00.0000000'
+    convertStartDate = selectedDate+startTime
+    convertEndDate = selectedDate+endTime
+
+    oauth = OutlookAuth.objects.get(pk=1)
+    auth_code = oauth.auth_code
+    user_email = oauth.user_email
+    rt = oauth.refresh_token
+    redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
+    json_token = get_token_from_refresh_token(rt, redirect_uri)
+    token = json_token["access_token"]
+
+    events =get_events_by_range(token, redirect_uri, convertStartDate, convertEndDate)
+    # print(events.keys())
+    eventsVal = events['value']
+    # # print(len(eventsVal))
+    # eventsDate = eventsVal[1]
+    # print(len(eventsDate))
+    # eventsDateStarts = eventsDate['Start']
+    # print(eventsDateStarts)
+    # json.loads(eventsVal)
+
+    time = []
+
+    for val in eventsVal:
+        eventStart = val['Start']
+        eventStartDateTime = eventStart['DateTime']
+        eventEnd = val['End']
+        eventEndDateTime = eventEnd['DateTime']
+
+        m = re.search('T\d\d.\d\d', eventStartDateTime)
+        if m:
+            found = m.group(0)
+            hourMinute = found[1:]
+            temp = hourMinute.split(":")
+            time.append(temp)
+
+
+        # print(time)
+        # print(eventEndDateTime)
+
+
+    # print(eventsVal)
+    # print(events)
+    # print(events['Start'])
+    # eventsArr= json.loads(events)
+    #
+    # for x in eventsArr['Start']:
+    #     print (x['DateTime'])
+
+    # print(events['start'])
+
+    # time = [['13','00'],['14','00']]
+
+    print(time)
     some_data_to_dump = {
         'time': time
     }
     data = json.dumps(some_data_to_dump)
-
-    selectedDate = request.GET['selectedDate']
-
-
 
     return HttpResponse(data, content_type='application/json')

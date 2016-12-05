@@ -254,22 +254,39 @@ $(document).ready(function() {
 
 
     });
+    var datePicker = $date.pickadate('picker')
 
-//    initialsise picker
-    var picker = $date.pickadate('picker')
-//    var timeArr;
+    var $time = $('#f1-Time');
+    $time.hide();
+////    initialsise picker
 
-    picker.on({
+//    var timeField = $('#f1-Time')
+
+    var $time = $('#f1-Time').pickatime({
+        min: [9, 00],
+        max: [17, 00],
+        formatSubmit: 'H:i',
+        hiddenSuffix: ''
+    });
+
+    var picker = $time.pickatime('picker')
+
+
+    datePicker.on({
 
 
         open: function() {
             console.log('Opened up!')
+            picker.clear()
+            picker.set('enable', true)
+//            $timePickerInput.clear()
         },
 
         close: function () {
 
 
-            dateSelect = picker.get()
+            dateSelect = datePicker.get('select', 'yyyy-mm-dd')
+            console.log(dateSelect)
             getTime()
 
 
@@ -290,18 +307,21 @@ $(document).ready(function() {
             }
 
             function timePicker(time) {
-                $('#f1-Time').pickatime({
-                    min: [9, 00],
-                    max: [17, 00],
-                    formatSubmit: 'H:i',
-                    hiddenSuffix: '',
-                    disable: time
+//                $('#f1-Time').pickatime({
+//                    min: [9, 00],
+//                    max: [17, 00],
+//                    formatSubmit: 'H:i',
+//                    hiddenSuffix: '',
+//                    disable: time
+//
+//                });
+                picker.set('disable', time)
+                $time.show()
 
-                });
+
+
 
             }
-
-
 
 
         }
