@@ -216,32 +216,6 @@
 <!--jpicker-->
 <script type="text/javascript">
 
-//    $(document).ready(function() {
-//        var dateToday = new Date();
-//        var date = $('#f1-Date').pickadate({
-//            format: 'dd/mm/yyyy',
-//            altFormat: "yyyy-mm-dd",
-//            formatSubmit: 'yyyy-mm-dd',
-//            min: dateToday,
-//            disable: [1, 7],
-//            hiddenSuffix: ''
-//
-//
-//        });
-//
-//
-//        $('#f1-Time').pickatime({
-//            min: [9, 00],
-//            max: [17, 00],
-//            formatSubmit: 'H:i',
-//            hiddenSuffix: '',
-////            disable: hiddentimes
-//        });
-//
-//
-//    });
-
-
 $(document).ready(function() {
     var dateToday = new Date();
     var $date = $('#f1-Date').pickadate({
@@ -261,7 +235,7 @@ $(document).ready(function() {
 ////    initialsise picker
 
 //    var timeField = $('#f1-Time')
-
+    var dateToday = new Date();
     var $time = $('#f1-Time').pickatime({
         min: [9, 00],
         max: [17, 00],
@@ -307,22 +281,11 @@ $(document).ready(function() {
             }
 
             function timePicker(time) {
-//                $('#f1-Time').pickatime({
-//                    min: [9, 00],
-//                    max: [17, 00],
-//                    formatSubmit: 'H:i',
-//                    hiddenSuffix: '',
-//                    disable: time
-//
-//                });
+
                 picker.set('disable', time)
                 $time.show()
 
-
-
-
             }
-
 
         }
 

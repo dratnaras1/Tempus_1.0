@@ -10,7 +10,7 @@ from django.shortcuts import render_to_response
 from django.template import Context
 from django.template import Template
 from calender.mailHelper import *
-from .forms import ClientAppointmentForm
+from .forms import ClientAppointmentForm, AppointmentFormAnalystDashboard
 from pyexchange import Exchange2010Service, ExchangeNTLMAuthConnection
 from datetime import datetime
 from pytz import timezone
@@ -122,8 +122,64 @@ def schedule(request):
 # def dashboard(request):
 #     return render(request, 'calender/dashboardTest.html')
 
+def dashboard_appointments(request):
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+
+        form = ClientAppointmentForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            date = form.cleaned_data['date']
+            time = form.cleaned_data['time']
+
+            oauth = OutlookAuth.objects.get(pk=1)
+            auth_code = oauth.auth_code
+            user_email = oauth.user_email
+            rt = oauth.refresh_token
+            redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
+
+
+            json = get_token_from_refresh_token(rt, redirect_uri)
+            token = json["access_token"]
+
+            # user_email = "dratnaras@itrsgroup.onmicrosoft.com"
+            response = create_appointment(token, user_email, date, time, email, name)
+
+            # send email to analyst
+            # send_mail(
+            #     'New Site Visit Booking',
+            #     name + ' has booked a new appointment with you on ' + date +' at ' +time,
+            #     'tempus@itrsgroup.onmicrosoft.com',
+            #     ['dratnaras@itrsgroup.com'],
+            #     fail_silently=False,
+            #     )
+            #
+            c =  Context({'status_code' : response })
+            #
+            # return HttpResponse('<h1>site visit booked, analyst will be in touch</h1>')
+            #
+            #
+            return HttpResponse(c)
+
+
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = ClientAppointmentForm()
+
+
+
+    return render(request, 'calender/dashboard_appointments.html', {'form': form})
+
+
 def dashboard(request):
     return render(request, 'calender/dashboard_base.html')
+
 
 # def clientBooking(request):
 #     return render(request, 'calender/client_booking.html')
@@ -205,13 +261,13 @@ def clientBooking(request):
             response = create_appointment(token, user_email, date, time, email, name)
 
             # send email to analyst
-            send_mail(
-                'New Site Visit Booking',
-                name + ' has booked a new appointment with you on ' + date +' at ' +time,
-                'tempus@itrsgroup.onmicrosoft.com',
-                ['dratnaras@itrsgroup.com'],
-                fail_silently=False,
-             )
+            # send_mail(
+            #     'New Site Visit Booking',
+            #     name + ' has booked a new appointment with you on ' + date +' at ' +time,
+            #     'tempus@itrsgroup.onmicrosoft.com',
+            #     ['dratnaras@itrsgroup.com'],
+            #     fail_silently=False,
+            #  )
 
             c =  Context({'status_code' : response })
 
