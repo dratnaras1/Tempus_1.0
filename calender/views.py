@@ -5,7 +5,7 @@ from calender.authhelper import get_signin_url, get_token_from_code, get_temp_ac
 from calender.outlookservice import get_me, get_events_by_range
 from calender.outlookservice import create_appointment
 from calender.authhelper import get_signin_url, get_token_from_code, get_access_token, get_token_from_refresh_token
-from calender.outlookservice import  get_events_by_range
+from calender.outlookservice import  get_events_by_range, get_my_events
 from django.shortcuts import render_to_response
 from django.template import Context
 from django.template import Template
@@ -98,8 +98,8 @@ def events(request):
     if not access_token:
         return HttpResponseRedirect(reverse('calender:home'))
     else:
-        # events = get_my_events(access_token, user_email)
-        events = get_events_by_range(access_token, user_email)
+        events = get_my_events(access_token, user_email)
+        # events = get_events_by_range(access_token, user_email)
         # context = { 'events': events['value'] }
         context = { 'events': events['value'] }
         return render(request, 'calender/events.html', context)

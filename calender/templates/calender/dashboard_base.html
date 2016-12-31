@@ -47,57 +47,88 @@
     <script type="text/javascript" charset="utf-8">
 
         function init() {
-            scheduler.config.multi_day = true;
-            scheduler.config.event_duration = 35;
-            scheduler.config.xml_date = "%Y-%m-%d %H:%i";
-            scheduler.config.occurrence_timestamp_in_utc = true;
-            scheduler.config.include_end_by = true;
-            scheduler.config.repeat_precise = true;
+//            scheduler.config.multi_day = true;
+//            scheduler.config.event_duration = 35;
+//            scheduler.config.xml_date = "%Y-%m-%d %H:%i";
+//            scheduler.config.show_loading = true;
+//            scheduler.config.occurrence_timestamp_in_utc = true;
+//            scheduler.config.include_end_by = true;
+//            scheduler.config.repeat_precise = true;
 //            scheduler.xy.scale_height = 30;
+                scheduler.config.readonly = true;
+//            scheduler.attachEvent("onLightbox", function(){
+//                var lightbox_form = scheduler.getLightbox(); // this will generate lightbox form
+//                var inputs = lightbox_form.getElementsByTagName('input');
+//                var date_of_end = null;
+//                for (var i=0; i<inputs.length; i++) {
+//                    if (inputs[i].name == "date_of_end") {
+//                        date_of_end = inputs[i];
+//                        break;
+//                    }
+//                }
+//
+//                var repeat_end_date_format = scheduler.date.date_to_str(scheduler.config.repeat_date);
+//                var show_minical = function(){
+//                    if (scheduler.isCalendarVisible())
+//                        scheduler.destroyCalendar();
+//                    else {
+//                        scheduler.renderCalendar({
+//                            position:date_of_end,
+//                            date: scheduler.getState().date,
+//                            navigation:true,
+//                            handler:function(date,calendar) {
+//                                date_of_end.value = repeat_end_date_format(date);
+//                                scheduler.destroyCalendar()
+//                            }
+//                        });
+//                    }
+//                };
+//                date_of_end.onclick = show_minical;
+//            });
+//
+//
+//
+//            scheduler.config.lightbox.sections = [
+//                { name:"description", height:200, map_to:"text", type:"textarea" , focus:true },
+//                { name:"recurring", type:"recurring", map_to:"rec_type", button:"recurring" },
+//                { name:"time", height:72, type:"calendar_time", map_to:"auto" }
+//            ];
 
-            scheduler.attachEvent("onLightbox", function(){
-                var lightbox_form = scheduler.getLightbox(); // this will generate lightbox form
-                var inputs = lightbox_form.getElementsByTagName('input');
-                var date_of_end = null;
-                for (var i=0; i<inputs.length; i++) {
-                    if (inputs[i].name == "date_of_end") {
-                        date_of_end = inputs[i];
-                        break;
-                    }
-                }
-
-                var repeat_end_date_format = scheduler.date.date_to_str(scheduler.config.repeat_date);
-                var show_minical = function(){
-                    if (scheduler.isCalendarVisible())
-                        scheduler.destroyCalendar();
-                    else {
-                        scheduler.renderCalendar({
-                            position:date_of_end,
-                            date: scheduler.getState().date,
-                            navigation:true,
-                            handler:function(date,calendar) {
-                                date_of_end.value = repeat_end_date_format(date);
-                                scheduler.destroyCalendar()
-                            }
-                        });
-                    }
-                };
-                date_of_end.onclick = show_minical;
-            });
 
 
 
-            scheduler.config.lightbox.sections = [
-                { name:"description", height:200, map_to:"text", type:"textarea" , focus:true },
-                { name:"recurring", type:"recurring", map_to:"rec_type", button:"recurring" },
-                { name:"time", height:72, type:"calendar_time", map_to:"auto" }
+            scheduler.init('scheduler_here', new Date(2016,1,1), "month");
+            var events = [
+                {id:1, text:"Meeting",   start_date:"04/11/2017 14:00",end_date:"04/11/2017 17:00"},
+                {id:2, text:"Conference",start_date:"04/15/2017 12:00",end_date:"04/18/2017 19:00"},
+                {id:3, text:"Interview", start_date:"04/24/2017 09:00",end_date:"04/24/2017 10:00"},
+                {id:4, text:"Interview", start_date:"01/01/2017 09:00",end_date:"01/01/2017 10:00"},
+                {id:5, text:"Interview", start_date:"12/25/2017 09:00",end_date:"12/25/2017 10:00"}
             ];
+//            var evenets = [["30/12/2016 09:00","30/2/2016 12:00","Meeting"]]
+//
+           scheduler.parse(events, "json");//takes the name and format of the data source
+//            scheduler.load(events);
+//            scheduler.load("./data/events.xml", function() {
+//                scheduler.showLightbox(2);
+//            });
+            scheduler.setCurrentView();
 
-            scheduler.init('scheduler_here', new Date(2016, 0, 10), "week");
 
-            scheduler.load("./data/events.xml", function() {
-                scheduler.showLightbox(2);
-            });
+//            scheduler.parse([
+//                {id:1, text:"Meeting", start_date:"30/12/2016 14:00", end_date:"30/12/2016 17:00"},
+//                {id:2, text:"Conference",start_date:"30/12/2016 12:00",end_date:"30/12/2016 19:00"},
+//                {id:3, text:"Interview", start_date:"31/12/2016 09:00",end_date:"31/12/2016 10:00"}
+//            ],"json");
+
+//            scheduler.addEvent("30-12-2016 09:00","30-12-2016 12:00","Meeting" )
+//            scheduler.addEvent("31/12/2016 09:00","31/12/2016 10:00", "Conf")
+//              scheduler.addEvent(evenets)
+
+
+
+
+
 
         }
 

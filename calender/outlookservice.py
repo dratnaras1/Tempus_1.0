@@ -1,6 +1,7 @@
 import requests
 import uuid
 import json
+from datetime import datetime, timedelta
 
 outlook_api_endpoint = 'https://outlook.office.com/api/v2.0{0}'
 
@@ -50,23 +51,23 @@ def get_me(access_token):
     else:
         return "{0}: {1}".format(r.status_code, r.text)
 
-# def get_my_events(access_token, user_email):
-#     get_events_url = outlook_api_endpoint.format('/Me/Events')
-#
-#     # Use OData query parameters to control the results
-#     #  - Only first 10 results returned
-#     #  - Only return the Subject, Start, and End fields
-#     #  - Sort the results by the Start field in ascending order
-#     query_parameters = {'$top': '10',
-#                         '$select': 'Subject,Start,End',
-#                         '$orderby': 'Start/DateTime ASC'}
-#
-#     r = make_api_call('GET', get_events_url, access_token, user_email, parameters = query_parameters)
-#
-#     if (r.status_code == requests.codes.ok):
-#         return r.json()
-#     else:
-#         return "{0}: {1}".format(r.status_code, r.text)
+def get_my_events(access_token, user_email):
+    get_events_url = outlook_api_endpoint.format('/Me/Events')
+
+    # Use OData query parameters to control the results
+    #  - Only first 10 results returned
+    #  - Only return the Subject, Start, and End fields
+    #  - Sort the results by the Start field in ascending order
+    query_parameters = {'$top': '10',
+                        '$select': 'Subject,Start,End',
+                        '$orderby': 'Start/DateTime ASC'}
+
+    r = make_api_call('GET', get_events_url, access_token, user_email, parameters = query_parameters)
+
+    if (r.status_code == requests.codes.ok):
+        return r.json()
+    else:
+        return "{0}: {1}".format(r.status_code, r.text)
 
 def get_events_by_range(access_token, user_email, start_datetime, end_datetime):
     get_events_url = outlook_api_endpoint.format('/Me/calendarview')
@@ -94,6 +95,11 @@ def get_events_by_range(access_token, user_email, start_datetime, end_datetime):
 def create_appointment(access_token, user_email, date, time, email, name):
     get_events_url = outlook_api_endpoint.format('/Me/events')
     dateTime = date+"T"+time+":00"
+    # make appointments an hour long
+    timeSplit = time.split(":")
+    endTime = int(timeSplit[0])+ 1
+    endTimeString = str(endTime)
+    endDateTime = date+"T"+endTimeString+":"+timeSplit[1]+":00"
     data= {
         "Subject": "Site Visit",
         "Body": {
@@ -105,7 +111,7 @@ def create_appointment(access_token, user_email, date, time, email, name):
             "TimeZone": "GMT Standard Time"
         },
         "End": {
-            "DateTime": dateTime,
+            "DateTime": endDateTime,
             "TimeZone": "GMT Standard Time"
         },
         "Attendees": [
