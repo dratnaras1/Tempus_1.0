@@ -1,5 +1,7 @@
 from django.conf.urls import url
 from calender import views
+from django.contrib import admin
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     # The home view ('/calender/')
@@ -23,9 +25,16 @@ urlpatterns = [
     url(r'^dashboard/appointments/$', views.dashboard_appointments, name='dashboardAppointments'),
     # client booking view ('/caldender/booking')
     # url(r'^booking/$', views.clientBooking, name='clientBooking')
-    url(r'^booking/$', views.clientBooking, name='clientBooking'),
-    #Get avilable Times
+    # url(r'^booking/$', views.clientBooking, name='clientBooking'),
+    url(r'^booking/(?P<username>[a-zA-Z0-9]+)$', views.clientBooking_for_user, name='clientBooking'),
+    #Get avilable Times for appointment booking
     url(r'^getTimes/$', views.getTimes, name='getTimes'),
+    # get events for dashboard view
+    url(r'^getEventsDashboard/$', views.getEventsDashboard, name='getEventsDashboard'),
+    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^logout/$', auth_views.logout, name='logout'),
+    url(r'^admin/', admin.site.urls),
+    url(r'^logout/$', auth_views.logout, {'template_name': 'logged_out.html'}, name='logout')
 
 ]
 

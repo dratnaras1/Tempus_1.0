@@ -55,8 +55,6 @@
     <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/legacy.js' %}" type="text/javascript" charset="utf-8"></script>
 
 
-
-
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <script src="{% static 'calender/dhtmlx/dhtmlxscheduler.js' %}" type="text/javascript" charset="utf-8"></script>
@@ -236,7 +234,7 @@
         var $time = $('#f1-Time').pickatime({
             min: [9, 00],
             max: [17, 00],
-            formatSubmit: 'H:i',
+            formatSubmit: 'HH:i',
             hiddenSuffix: ''
         });
 
@@ -271,7 +269,7 @@
                         },
                         success: function (data) {
                             timeArr = data.time
-                            console.log(timeArr.toString())
+//                            console.log(timeArr.toString())
                             timePicker(timeArr)
                         }
                     });

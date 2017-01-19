@@ -58,7 +58,8 @@ def get_my_events(access_token, user_email):
     #  - Only first 10 results returned
     #  - Only return the Subject, Start, and End fields
     #  - Sort the results by the Start field in ascending order
-    query_parameters = {'$top': '10',
+    query_parameters = {
+                        '$top': '2500',
                         '$select': 'Subject,Start,End',
                         '$orderby': 'Start/DateTime ASC'}
 
