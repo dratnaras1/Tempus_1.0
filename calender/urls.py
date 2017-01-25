@@ -29,6 +29,8 @@ urlpatterns = [
     url(r'^booking/(?P<username>[a-zA-Z0-9]+)$', views.clientBooking_for_user, name='clientBooking'),
     #Get avilable Times for appointment booking
     url(r'^getTimes/$', views.getTimes, name='getTimes'),
+    # get times for user
+    url(r'^getTimes/(?P<username>[a-zA-Z0-9]+)$', views.getTimes_for_user, name='getTimes_for_user'),
     # get events for dashboard view
     url(r'^getEventsDashboard/$', views.getEventsDashboard, name='getEventsDashboard'),
     # url(r'^login/$', auth_views.login, name='login'),

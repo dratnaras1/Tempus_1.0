@@ -299,7 +299,7 @@ def clientBooking(request):
     # return render(request, 'calender/client_booking_bs', {'form': form, 'time': time})
 
 def clientBooking_for_user(request,username):
-    print(username)
+    # print(username)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
 
@@ -363,7 +363,8 @@ def getTimes(request):
     convertStartDate = selectedDate+startTime
     convertEndDate = selectedDate+endTime
 
-    oauth = OutlookAuth.objects.get(pk=1)
+    # oauth = OutlookAuth.objects.get(pk=1)
+    oauth = getUser(request)
     auth_code = oauth.auth_code
     user_email = oauth.user_email
     rt = oauth.refresh_token
@@ -398,7 +399,61 @@ def getTimes(request):
 
     # time = [['13','00'],['14','00']]
 
-    print(time)
+    # print(time)
+    some_data_to_dump = {
+        'time': time
+    }
+    data = json.dumps(some_data_to_dump)
+
+    return HttpResponse(data, content_type='application/json')
+
+def getTimes_for_user(request, username):
+
+
+    selectedDate = request.GET['selectedDate']
+    startTime = 'T09:00:00.0000000'
+    endTime = 'T17:30:00.0000000'
+    convertStartDate = selectedDate+startTime
+    convertEndDate = selectedDate+endTime
+
+    # oauth = OutlookAuth.objects.get(pk=1)
+    # oauth = getUser(request)
+    oauth = getUser_by_username(username)
+    auth_code = oauth.auth_code
+    user_email = oauth.user_email
+    rt = oauth.refresh_token
+    redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
+    json_token = get_token_from_refresh_token(rt, redirect_uri)
+    token = json_token["access_token"]
+
+    events =get_events_by_range(token, redirect_uri, convertStartDate, convertEndDate)
+    # print(events.keys())
+    eventsVal = events['value']
+    # # print(len(eventsVal))
+    # eventsDate = eventsVal[1]
+    # print(len(eventsDate))
+    # eventsDateStarts = eventsDate['Start']
+    # print(eventsDateStarts)
+    # json.loads(eventsVal)
+
+    time = []
+
+    for val in eventsVal:
+        eventStart = val['Start']
+        eventStartDateTime = eventStart['DateTime']
+        eventEnd = val['End']
+        eventEndDateTime = eventEnd['DateTime']
+
+        m = re.search('T\d\d.\d\d', eventStartDateTime)
+        if m:
+            found = m.group(0)
+            hourMinute = found[1:]
+            temp = hourMinute.split(":")
+            time.append(temp)
+
+    # time = [['13','00'],['14','00']]
+
+    # print(time)
     some_data_to_dump = {
         'time': time
     }

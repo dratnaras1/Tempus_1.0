@@ -216,7 +216,14 @@
 <!--jpicker-->
 <script type="text/javascript">
 
+    var segment_str = window.location.pathname; //
+    var segment_array = segment_str.split( '/' );
+//    last segmant of url
+    var userName = segment_array.pop();
+
+
 $(document).ready(function() {
+
     var dateToday = new Date();
     var $date = $('#f1-Date').pickadate({
         format: 'dd/mm/yyyy',
@@ -268,7 +275,7 @@ $(document).ready(function() {
                 var timeArr;
                 $.ajax({
                     type: 'GET',
-                    url: '/calender/getTimes/',
+                    url: '/calender/getTimes/'+userName,
                     data: {
                         "selectedDate": dateSelect
                     },
