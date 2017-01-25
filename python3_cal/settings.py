@@ -155,7 +155,10 @@ EMAIL_HOST_PASSWORD='MAthu2510'
 EMAIL_PORT='587'
 EMAIL_USE_TLS= True
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = 'calender:login'
+LOGIN_REDIRECT_URL = 'calender:home'
+LOGOUT_REDIRECT_URL = 'calender:login'
+
 
 
 

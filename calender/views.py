@@ -446,3 +446,4 @@ def getEventsDashboard(request):
 
     return HttpResponse(data, content_type='application/json')
     # return HttpResponse(context)
+
