@@ -189,7 +189,7 @@ def dashboard_appointments(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'calender/dashboard_base.html')
+    return render(request, 'calender/dashboard_home.html')
 
 
 # def clientBooking(request):

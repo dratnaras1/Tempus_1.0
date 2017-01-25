@@ -1,214 +1,44 @@
+{% extends 'calender/dashboard_base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
+{% block content %}
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Tempus_Appointments</title>
-
-    <!--"{% static 'calender/bootstrap.min.css' %}"-->
-
-    <!-- Bootstrap Core CSS -->
-    <link href="{% static 'calender/dashboard-bootstrap/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-
-    <!-- MetisMenu CSS -->
-    <link href="{% static 'calender/dashboard-bootstrap/vendor/metisMenu/metisMenu.min.css'%}" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="{% static 'calender/dashboard-bootstrap/dist/css/sb-admin-2.css'%}" rel="stylesheet">
-
-    <!-- Morris Charts CSS -->
-    <link href="{% static 'calender/dashboard-bootstrap/vendor/morrisjs/morris.css'%}" rel="stylesheet">
-
-    <!-- Custom Fonts -->
-    <link href="{% static 'calender/dashboard-bootstrap/vendor/font-awesome/css/font-awesome.min.css'%}" rel="stylesheet" type="text/css">
-
-    <link rel="stylesheet" href="{% static 'calender/dhtmlx/dhtmlxscheduler.css' %}" type="text/css" media="screen" title="no title"
-          charset="utf-8">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <![endif]-->
-
-    <!--jdatepicker css-->
-    <link rel="stylesheet" href="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/themes/default.css' %}">
-    <link rel="stylesheet" href="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/themes/default.date.css' %}">
-    <link rel="stylesheet" href="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/themes/default.time.css' %}">
-
-
-    <!--JDatePicker-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
-
-    <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.js' %}" type="text/javascript" charset="utf-8"></script>
-    <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.date.js' %}" type="text/javascript" charset="utf-8"></script>
-    <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.time.js' %}" type="text/javascript" charset="utf-8"></script>
-    <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/legacy.js' %}" type="text/javascript" charset="utf-8"></script>
-
-
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <script src="{% static 'calender/dhtmlx/dhtmlxscheduler.js' %}" type="text/javascript" charset="utf-8"></script>
-    <script src="{% static 'calender/dhtmlx/ext/dhtmlxscheduler_recurring.js' %}" type="text/javascript" charset="utf-8"></script>
-    <script src="{% static 'calender/dhtmlx/ext/dhtmlxscheduler_minical.js' %}" type="text/javascript" charset="utf-8"></script>
-
-
-    <script type="text/javascript" charset="utf-8">
-
-        function init() {
-            scheduler.config.multi_day = true;
-            scheduler.config.event_duration = 35;
-            scheduler.config.xml_date = "%Y-%m-%d %H:%i";
-            scheduler.config.occurrence_timestamp_in_utc = true;
-            scheduler.config.include_end_by = true;
-            scheduler.config.repeat_precise = true;
-//            scheduler.xy.scale_height = 30;
-
-            scheduler.attachEvent("onLightbox", function(){
-                var lightbox_form = scheduler.getLightbox(); // this will generate lightbox form
-                var inputs = lightbox_form.getElementsByTagName('input');
-                var date_of_end = null;
-                for (var i=0; i<inputs.length; i++) {
-                    if (inputs[i].name == "date_of_end") {
-                        date_of_end = inputs[i];
-                        break;
-                    }
-                }
-
-                var repeat_end_date_format = scheduler.date.date_to_str(scheduler.config.repeat_date);
-                var show_minical = function(){
-                    if (scheduler.isCalendarVisible())
-                        scheduler.destroyCalendar();
-                    else {
-                        scheduler.renderCalendar({
-                            position:date_of_end,
-                            date: scheduler.getState().date,
-                            navigation:true,
-                            handler:function(date,calendar) {
-                                date_of_end.value = repeat_end_date_format(date);
-                                scheduler.destroyCalendar()
-                            }
-                        });
-                    }
-                };
-                date_of_end.onclick = show_minical;
-            });
-
-
-
-            scheduler.config.lightbox.sections = [
-                { name:"description", height:200, map_to:"text", type:"textarea" , focus:true },
-                { name:"recurring", type:"recurring", map_to:"rec_type", button:"recurring" },
-                { name:"time", height:72, type:"calendar_time", map_to:"auto" }
-            ];
-
-            scheduler.init('scheduler_here', new Date(2016, 0, 10), "week");
-
-            scheduler.load("./data/events.xml", function() {
-                scheduler.showLightbox(2);
-            });
-
-        }
-
-    </script>
-
-
-</head>
-
-<body  onload="init();">
-
-<div id="wrapper">
-
-    <!-- Navigation -->
-    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="index.html">Tempus</a>
-        </div>
-
-
-        <div class="navbar-default sidebar" role="navigation">
-            <div class="sidebar-nav navbar-collapse">
-                <ul class="nav" id="side-menu">
-                    <li class="sidebar-search">
-                        <div class="input-group custom-search-form">
-                            <input type="text" class="form-control" placeholder="Search...">
-                            <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </span>
-                        </div>
-                        <!-- /input-group -->
-                    </li>
-
-                    <li>
-                        <a href="{% url 'calender:dashboard' %}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'calender:dashboardAppointments' %}"><i class="fa fa-table fa-fw"></i> Appointments</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.sidebar-collapse -->
-        </div>
-        <!-- /.navbar-static-side -->
-    </nav>
-
-    <!-- Page Content -->
-    <div id="page-wrapper">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Appointments</h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-        </div>
-
+<!-- Page Content -->
+<div id="page-wrapper">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        Schedule Appointments
-                    </div>
-                    <!-- /.panel-heading -->
-                    <div class="panel-body"/>
-                        <form method="post">
-                            {% csrf_token %}
-                            {{ form }}
-                            <input type="submit" value="Submit" />
-                        </form>
-                    </div>
-                    <!-- /.panel-body -->
-
-                </div>
-
+                <h1 class="page-header">Appointments</h1>
             </div>
+            <!-- /.col-lg-12 -->
         </div>
-        <!-- /.container-fluid -->
+        <!-- /.row -->
     </div>
-    <!-- /#page-wrapper -->
 
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Schedule Appointments
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body"/>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input type="submit" value="Submit" />
+                </form>
+            </div>
+            <!-- /.panel-body -->
+
+        </div>
+
+    </div>
 </div>
-<!-- /#wrapper -->
+<!-- /.container-fluid -->
+</div>
 
-<!--Date picker-->
+
 <script type="text/javascript">
 
     $(document).ready(function() {
@@ -292,23 +122,4 @@
 
 </script>
 
-
-<!-- jQuery -->
-<!--<script src="{% static 'calender/dashboard-bootstrap/vendor/jquery/jquery.min.js'%}"></script>-->
-
-<!-- Bootstrap Core JavaScript -->
-<script src="{% static 'calender/dashboard-bootstrap/vendor/bootstrap/js/bootstrap.min.js'%}"></script>
-
-<!-- Metis Menu Plugin JavaScript -->
-<script src="{% static 'calender/dashboard-bootstrap/vendor/metisMenu/metisMenu.min.js'%}"></script>
-
-<!-- Custom Theme JavaScript -->
-<script src="{% static 'calender/dashboard-bootstrap/dist/js/sb-admin-2.js' %}"></script>
-
-<script src="{% static 'calender/form-bootstrap/assets/js/retina-1.1.0.min.js' %}"></script>
-<script src="{% static 'calender/form-bootstrap/assets/js/scripts.js' %}"></script>
-
-
-</body>
-
-</html>
+{% endblock %}
