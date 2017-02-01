@@ -6,8 +6,9 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     # The home view ('/calender/')
     url(r'^$', views.home, name='home'),
-    # Explicit home ('/calender/home/')
-    url(r'^home/$', views.home, name='home'),
+    # url(r'^$', views.index, name='index'),
+    # # Explicit home ('/calender/home/')
+    # url(r'^home/$', views.home, name='home'),
     # Redirect to get token ('/calender/gettoken/')
     url(r'^gettoken/$', views.gettoken, name='gettoken'),
     # Redirect to get temporary token ('/calender/gettoken/')
@@ -23,6 +24,8 @@ urlpatterns = [
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     # dashboard_appointment view (calender/dashboard/appointment)
     url(r'^dashboard/appointments/$', views.dashboard_appointments, name='dashboardAppointments'),
+    # route planner view
+    url(r'^dashboard/routeplanner/$', views.dashboard_routePlanner, name='routePlanner'),
     # client booking view ('/caldender/booking')
     # url(r'^booking/$', views.clientBooking, name='clientBooking')
     # url(r'^booking/$', views.clientBooking, name='clientBooking'),

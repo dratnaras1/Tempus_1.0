@@ -1,0 +1,203 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+
+    <title>Tempus_Appointments</title>
+
+    <!--"{% static 'calender/bootstrap.min.css' %}"-->
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static 'calender/dashboard-bootstrap/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="{% static 'calender/dashboard-bootstrap/vendor/metisMenu/metisMenu.min.css'%}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static 'calender/dashboard-bootstrap/dist/css/sb-admin-2.css'%}" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="{% static 'calender/dashboard-bootstrap/vendor/morrisjs/morris.css'%}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="{% static 'calender/dashboard-bootstrap/vendor/font-awesome/css/font-awesome.min.css'%}" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href="{% static 'calender/dhtmlx/dhtmlxscheduler.css' %}" type="text/css" media="screen" title="no title"
+          charset="utf-8">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <![endif]-->
+
+    <!--jdatepicker css-->
+    <link rel="stylesheet" href="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/themes/default.css' %}">
+    <link rel="stylesheet" href="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/themes/default.date.css' %}">
+    <link rel="stylesheet" href="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/themes/default.time.css' %}">
+
+
+    <!--JDatePicker-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+
+    <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.date.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.time.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/legacy.js' %}" type="text/javascript" charset="utf-8"></script>
+
+
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="{% static 'calender/dhtmlx/dhtmlxscheduler.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'calender/dhtmlx/ext/dhtmlxscheduler_recurring.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'calender/dhtmlx/ext/dhtmlxscheduler_minical.js' %}" type="text/javascript" charset="utf-8"></script>
+
+</head>
+
+<body  onload="init();">
+<div id="wrapper">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">Tempus</a>
+        </div>
+        <!-- /.navbar-header -->
+
+        <ul class="nav navbar-top-links navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li><a href="#"><i class="fa fa-user fa-fw"></i>{{ user }}</a>
+                        <!--</li>-->
+                        <!--<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>-->
+                        <!--</li>-->
+                    <li class="divider"></li>
+                    <li><a href="{% url 'calender:logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                    </li>
+                </ul>
+                <!-- /.dropdown-user -->
+            </li>
+            <!-- /.dropdown -->
+        </ul>
+        <!--/.navbar-top-links-->
+
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse">
+                <ul class="nav" id="side-menu">
+                    <li class="sidebar-search">
+                        <div class="input-group custom-search-form">
+                            <input type="text" class="form-control" placeholder="Search...">
+                            <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                        </div>
+                        <!-- /input-group -->
+                    </li>
+
+                    <!--<li>-->
+                        <!--<a href="{% url 'calender:dashboard' %}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="{% url 'calender:dashboardAppointments' %}"><i class="fa fa-table fa-fw"></i> Appointments</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="{% url 'calender:routePlanner' %}"><i class="fa fa-wrench fa-fw"></i> Route Planner </a>-->
+                    <!--</li>-->
+                </ul>
+            </div>
+            <!-- /.sidebar-collapse -->
+        </div>
+        <!-- /.navbar-static-side -->
+    </nav>
+
+    <!-- Page Content -->
+
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Outlook Sync</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Outlook Sync
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body" />
+                    <p>Welcome to Tempus! Inorder for the application to work you will need to sync Tempus with your Outlook.</p>
+                    <p>Please click on the link below and sign in with your work email e.g. example@itrsgroup.com</p>
+                    <!--<a href="' + {{sign_in_url}} +'">Click here to sign in and view your mail</a>-->
+                    <a href="{{ sign_in_url }}" >Click here to sign in and view your schedule</a>
+                </div>
+                <!--/.panel-body -->
+
+
+                <!--<iframe-->
+                <!--width="700"-->
+                <!--height="500"-->
+                <!--frameborder="0" style="border:0"-->
+                <!--src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyBnfGVMd32oRpYZepmBMvN4Y_85KpWWt2E&origin=Oslo+Norway&destination=Telemark+Norway&avoid=tolls|highways" >-->
+
+
+
+                <!--&lt;!&ndash;src="https://www.google.com/maps/embed/v1/search?key=AIzaSyBnfGVMd32oRpYZepmBMvN4Y_85KpWWt2E&q=record+stores+in+Seattle" allowfullscreen>&ndash;&gt;-->
+                <!--</iframe>-->
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+</div>
+<!-- /#wrapper -->
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="{% static 'calender/dashboard-bootstrap/vendor/metisMenu/metisMenu.min.js'%}"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="{% static 'calender/dashboard-bootstrap/dist/js/sb-admin-2.js' %}"></script>
+
+<script src="{% static 'calender/form-bootstrap/assets/js/retina-1.1.0.min.js' %}"></script>
+<script src="{% static 'calender/form-bootstrap/assets/js/scripts.js' %}"></script>
+
+
+
+
+</body>
+
+</html>
+

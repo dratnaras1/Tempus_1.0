@@ -28,8 +28,10 @@ import re
 
 # Create your views here.
 # def home(request):
-#     redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
+#     redirect_uri = request.build_absolute_uri(reverse('gettoken'))
+#     print(redirect_uri)
 #     sign_in_url = get_signin_url(redirect_uri)
+#     print("signinurl:" +  sign_in_url)
 #     return HttpResponse('<a href="' + sign_in_url +'">Click here to sign in and view your mail</a>')
 
 @login_required
@@ -42,7 +44,20 @@ def home(request):
         redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
         sign_in_url = get_signin_url(redirect_uri)
         c = Context({'sign_in_url': sign_in_url})
-        return render(request, 'calender/index.html' , c)
+        # return render(request, 'calender/index.html' , c)
+        return render(request, 'calender/dashboard_outlookSync.html' , c)
+#
+# @login_required
+# def index(request):
+#     # Check if user has connected app with their outlook, if not direct to connection page
+#     try:
+#         outh = OutlookAuth.objects.get(user_email=request.user.email)
+#         return dashboard(request)
+#     except ObjectDoesNotExist:
+#         redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
+#         sign_in_url = get_signin_url(redirect_uri)
+#         c = Context({'sign_in_url': sign_in_url})
+#         return render(request, 'calender/index.html' , c)
 
 def gettoken(request):
     auth_code = request.GET['code']
@@ -77,8 +92,8 @@ def gettoken(request):
     request.session['user_email'] = user['EmailAddress']
 
 
-
-    return HttpResponse('User Email: {0}, Access token: {1}'.format(user['EmailAddress'], access_token))
+    return dashboard(request)
+    # return HttpResponse('User Email: {0}, Access token: {1}'.format(user['EmailAddress'], access_token))
 
 def gettempttoken(request):
     auth_code = request.GET['code']
@@ -189,8 +204,14 @@ def dashboard_appointments(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'calender/dashboard_home.html')
+    context = {'user':request.user}
+    return render(request, 'calender/dashboard_home.html', context)
 
+
+@login_required
+def dashboard_routePlanner(request):
+    # context = {'user':request.user}
+    return render(request, 'calender/dashboard_routePlanner.html')
 
 # def clientBooking(request):
 #     return render(request, 'calender/client_booking.html')

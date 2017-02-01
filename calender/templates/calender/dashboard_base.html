@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
 
     <title>Tempus_Appointments</title>
 
@@ -147,6 +149,40 @@
 
     </script>
 
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+            height: 50%;
+
+        }
+        /* Optional: Makes the sample page fill the window. */
+        /*html, body {*/
+            /*height: 50%;*/
+            /*margin: 0;*/
+            /*padding: 0;*/
+            /*!*overflow: visible*!*/
+        /*}*/
+        #floating-panel {
+            /*position: absolute;*/
+            top: 40px;
+            left: 25%;
+            z-index: 5;
+            background-color: #fff;
+            padding: 5px;
+            border: 1px solid #999;
+            text-align: center;
+            font-family: 'Roboto','sans-serif';
+            line-height: 50px;
+            padding-left: 10px;
+
+        }
+        #warnings-panel {
+            width: 50%;
+            height:10%;
+            text-align: center;
+        }
+    </style>
 
 </head>
 
@@ -362,7 +398,7 @@
                     <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
-                    <!--<li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>-->
+                    <li><a href="#"><i class="fa fa-user fa-fw"></i>{{ user }}</a>
                     <!--</li>-->
                     <!--<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>-->
                     <!--</li>-->
@@ -483,6 +519,9 @@
                     </li>
                     <li>
                         <a href="{% url 'calender:dashboardAppointments' %}"><i class="fa fa-table fa-fw"></i> Appointments</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'calender:routePlanner' %}"><i class="fa fa-wrench fa-fw"></i> Route Planner </a>
                     </li>
                 </ul>
             </div>
@@ -613,6 +652,8 @@
 
 <script src="{% static 'calender/form-bootstrap/assets/js/retina-1.1.0.min.js' %}"></script>
 <script src="{% static 'calender/form-bootstrap/assets/js/scripts.js' %}"></script>
+
+
 
 
 </body>
