@@ -20,12 +20,14 @@ from django.core.mail import send_mail
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
-from calender.models import OutlookAuth
+from calender.models import OutlookAuth, BookingToken
 from calender.helper import getUser, getUser_by_username
+from calender.token import *
 import time
 import json
 import re
 
+from django.utils import six
 # Create your views here.
 # def home(request):
 #     redirect_uri = request.build_absolute_uri(reverse('gettoken'))
@@ -204,7 +206,8 @@ def dashboard_appointments(request):
 
 @login_required
 def dashboard(request):
-    context = {'user':request.user}
+    context = {'user':request.user.first_name}
+    print(request.user.first_name)
     return render(request, 'calender/dashboard_home.html', context)
 
 
@@ -375,6 +378,67 @@ def clientBooking_for_user(request,username):
 
     return render(request, 'calender/client_booking_bs', {'form': form})
 
+def clientBooking_for_token(request,token):
+    if check_token_valid(token):
+        if (request.method == 'POST'):
+            # create a form instance and populate it with data from the request:
+
+            form = ClientAppointmentForm(request.POST)
+            # check whether it's valid:
+            if form.is_valid():
+                # process the data in form.cleaned_data as required
+                # ...
+                # redirect to a new URL:
+                name = form.cleaned_data['name']
+                email = form.cleaned_data['email']
+                date = form.cleaned_data['date']
+                time = form.cleaned_data['time']
+
+
+                oauth = get_user_from_token(token)
+                auth_code = oauth.auth_code
+                user_email = oauth.user_email
+                rt = oauth.refresh_token
+                redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
+
+                token = BookingToken.objects.get(token=token)
+                token.used = True
+                token.save()
+
+
+                json = get_token_from_refresh_token(rt, redirect_uri)
+                token = json["access_token"]
+
+                # user_email = "dratnaras@itrsgroup.onmicrosoft.com"
+                response = create_appointment(token, user_email, date, time, email, name)
+
+                # send email to analyst
+                # send_mail(
+                #     'New Site Visit Booking',
+                #     name + ' has booked a new appointment with you on ' + date +' at ' +time,
+                #     'tempus@itrsgroup.onmicrosoft.com',
+                #     ['dratnaras@itrsgroup.com'],
+                #     fail_silently=False,
+                #  )
+
+                c =  Context({'status_code' : response })
+
+                # return HttpResponse('<h1>site visit booked, analyst will be in touch</h1>')
+
+
+                return HttpResponse(c)
+
+
+
+        # if a GET (or any other method) we'll create a blank form
+        else:
+            form = ClientAppointmentForm()
+
+
+        return render(request, 'calender/client_booking_bs', {'form': form})
+    else:
+        return HttpResponse('<h1>Token expired</h1>')
+
 def getTimes(request):
 
 
@@ -385,7 +449,7 @@ def getTimes(request):
     convertEndDate = selectedDate+endTime
 
     # oauth = OutlookAuth.objects.get(pk=1)
-    oauth = getUser(request)
+    oauth = (request)
     auth_code = oauth.auth_code
     user_email = oauth.user_email
     rt = oauth.refresh_token
@@ -396,12 +460,6 @@ def getTimes(request):
     events =get_events_by_range(token, redirect_uri, convertStartDate, convertEndDate)
     # print(events.keys())
     eventsVal = events['value']
-    # # print(len(eventsVal))
-    # eventsDate = eventsVal[1]
-    # print(len(eventsDate))
-    # eventsDateStarts = eventsDate['Start']
-    # print(eventsDateStarts)
-    # json.loads(eventsVal)
 
     time = []
 
@@ -428,7 +486,7 @@ def getTimes(request):
 
     return HttpResponse(data, content_type='application/json')
 
-def getTimes_for_user(request, username):
+def getTimes_for_user(request, token):
 
 
     selectedDate = request.GET['selectedDate']
@@ -439,7 +497,7 @@ def getTimes_for_user(request, username):
 
     # oauth = OutlookAuth.objects.get(pk=1)
     # oauth = getUser(request)
-    oauth = getUser_by_username(username)
+    oauth = get_user_from_token(token)
     auth_code = oauth.auth_code
     user_email = oauth.user_email
     rt = oauth.refresh_token
@@ -523,3 +581,35 @@ def getEventsDashboard(request):
     return HttpResponse(data, content_type='application/json')
     # return HttpResponse(context)
 
+def unsubscribe(request, username, token):
+    """
+    User is immediately unsubscribed if they are logged in as username, or
+    if they came from an unexpired unsubscribe link. Otherwise, they are
+    redirected to the login page and unsubscribed as soon as they log in.
+    """
+
+    user = get_object_or_404(User, username=username, is_active=True)
+
+    if ( (request.user.is_authenticated() and request.user == user) or
+             user.get_profile().check_token(token)):
+        # unsubscribe them
+        profile = user.get_profile()
+        profile.newsletter = False
+        profile.save()
+
+        return render(request, 'calender/unsubscribe.html')
+
+    # Otherwise redirect to login page
+    next_url = reverse('user_signups.views.unsubscribe',
+                       kwargs={'username': username, 'token': token,})
+    return HttpResponseRedirect('%s?next=%s' % (reverse('login'), next_url))
+
+# def bookingUrlGenerate(request):
+#
+#
+#     # context = {'token': token}
+#     return render(request, 'calender/dashboard_bookingUrl.html')
+#     # return HttpResponse('<p>'+token+'</p>')
+
+def dashboard_bookingUrl(request):
+    return render(request, 'calender/dashboard_bookingUrl.html')

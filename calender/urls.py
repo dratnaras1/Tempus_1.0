@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from calender import views
+from calender import views, token
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
@@ -26,20 +26,27 @@ urlpatterns = [
     url(r'^dashboard/appointments/$', views.dashboard_appointments, name='dashboardAppointments'),
     # route planner view
     url(r'^dashboard/routeplanner/$', views.dashboard_routePlanner, name='routePlanner'),
+    # get booking url
+    url(r'^dashboard/bookingurl/$', views.dashboard_bookingUrl, name='dashboardBookingUrl'),
+    # generate booking URL
+    url(r'^dashboard/generatebookingurl/$', token.create_token, name='GenerateBookingUrl'),
     # client booking view ('/caldender/booking')
     # url(r'^booking/$', views.clientBooking, name='clientBooking')
     # url(r'^booking/$', views.clientBooking, name='clientBooking'),
-    url(r'^booking/(?P<username>[a-zA-Z0-9]+)$', views.clientBooking_for_user, name='clientBooking'),
+    # url(r'^booking/(?P<username>[a-zA-Z0-9]+)$', views.clientBooking_for_user, name='clientBooking'),
+    # booking by token
+    url(r'^booking/(?P<token>[\w.:\-_=]+)$', views.clientBooking_for_token, name='clientBookingToken'),
     #Get avilable Times for appointment booking
-    url(r'^getTimes/$', views.getTimes, name='getTimes'),
+    # url(r'^getTimes/$', views.getTimes, name='getTimes'),
     # get times for user
-    url(r'^getTimes/(?P<username>[a-zA-Z0-9]+)$', views.getTimes_for_user, name='getTimes_for_user'),
+    url(r'^getTimes/(?P<token>[\w.:\-_=]+)$', views.getTimes_for_user, name='getTimes_for_user'),
     # get events for dashboard view
     url(r'^getEventsDashboard/$', views.getEventsDashboard, name='getEventsDashboard'),
     # url(r'^login/$', auth_views.login, name='login'),
     url(r'^login/$', auth_views.login, {'template_name':'calender/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^admin/', admin.site.urls),
+    # url(r'^booking/(?P<username>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', 'user_signups.views.unsubscribe')
     # url(r'^logout/$', auth_views.logout, {'template_name': 'calender/login.html'}, name='logout')
 
 ]
