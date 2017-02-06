@@ -26,7 +26,8 @@
                 <form method="post">
                     {% csrf_token %}
                     {{ form }}
-                    <input type="submit" value="Submit" />
+                    <p></p>
+                    <input type="submit" value="Submit" class ="btn btn-primary"/>
                 </form>
             </div>
             <!-- /.panel-body -->
@@ -76,7 +77,6 @@
 
 
             open: function() {
-                console.log('Opened up!')
                 picker.clear()
                 picker.set('enable', true)
 //            $timePickerInput.clear()
@@ -100,7 +100,6 @@
                         },
                         success: function (data) {
                             timeArr = data.time
-//                            console.log(timeArr.toString())
                             timePicker(timeArr)
                         }
                     });

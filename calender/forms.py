@@ -23,3 +23,10 @@ class AppointmentFormAnalystDashboard(forms.Form):
     email = forms.CharField(label = 'Email', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Email ...'}))
     date = forms.CharField(label = 'Date', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Date ...'}))
     time = forms.CharField(label = 'Time', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Time ...'}))
+
+class BookingUrlEmailForm(forms.Form):
+    initial_subject= "ITRS Site Visit"
+    to_Recipients = forms.EmailField(label = 'To', max_length=100, widget=forms.TextInput(attrs={'class':'form-control'}))
+    # carbon_copy = forms.EmailField(label = 'CC', max_length=100, widget=forms.TextInput(attrs={'class':'form-control'}))
+    subject = forms.CharField(label = 'Subject', max_length=100, initial=initial_subject, widget=forms.TextInput(attrs={'class':'form-control'}))
+    body = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control'}))

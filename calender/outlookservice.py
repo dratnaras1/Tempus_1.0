@@ -133,3 +133,28 @@ def create_appointment(access_token, user_email, date, time, email, name):
     else:
         return "{0}: {1}".format(r.status_code, r.text)
 
+def send_email(access_token, user_email, to_recipients,body, subject):
+    send_email_url= outlook_api_endpoint.format('/Me/sendmail')
+    data = {
+        "Message": {
+            "Subject": subject,
+            "Body": {
+                "ContentType": "Text",
+                "Content": body
+            },
+            "ToRecipients": [
+                {
+                    "EmailAddress": {
+                        "Address": to_recipients
+                    }
+                }
+            ]
+        }
+
+    }
+    r = make_api_call('POST',send_email_url, access_token, user_email, payload=data)
+
+    if (r.status_code == requests.codes.ok):
+        return r.json()
+    else:
+        return "{0}: {1}".format(r.status_code, r.text)

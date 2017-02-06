@@ -219,7 +219,7 @@
     var segment_str = window.location.pathname; //
     var segment_array = segment_str.split( '/' );
 //    last segmant of url
-    var userName = segment_array.pop();
+    var token = segment_array.pop();
 
 
 $(document).ready(function() {
@@ -275,7 +275,7 @@ $(document).ready(function() {
                 var timeArr;
                 $.ajax({
                     type: 'GET',
-                    url: '/calender/getTimes/'+userName,
+                    url: '/calender/getTimes/'+token,
                     data: {
                         "selectedDate": dateSelect
                     },

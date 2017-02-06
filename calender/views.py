@@ -5,13 +5,13 @@ from calender.authhelper import get_signin_url, get_token_from_code, get_temp_ac
 from calender.outlookservice import get_me, get_events_by_range
 from calender.outlookservice import create_appointment
 from calender.authhelper import get_signin_url, get_token_from_code, get_access_token, get_token_from_refresh_token
-from calender.outlookservice import  get_events_by_range, get_my_events
+from calender.outlookservice import  get_events_by_range, get_my_events,send_email
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import Context
 from django.template import Template
 from calender.mailHelper import *
-from .forms import ClientAppointmentForm, AppointmentFormAnalystDashboard
+from .forms import ClientAppointmentForm, AppointmentFormAnalystDashboard, BookingUrlEmailForm
 from pyexchange import Exchange2010Service, ExchangeNTLMAuthConnection
 from datetime import datetime
 from pytz import timezone
@@ -203,6 +203,40 @@ def dashboard_appointments(request):
 
 
     return render(request, 'calender/dashboard_appointments.html', {'form': form})
+
+def dashboard_bookingUrl(request):
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = BookingUrlEmailForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+
+            to_recipients = form.cleaned_data['to_Recipients']
+            # carbon_copy = form.cleaned_data['carbon_copy']
+            subject = form.cleaned_data['subject']
+            body = form.cleaned_data['body']
+
+            oauth = getUser(request)
+            # oauth = OutlookAuth.objects.get(pk=1)
+            auth_code = oauth.auth_code
+            user_email = oauth.user_email
+            rt = oauth.refresh_token
+            redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
+            json = get_token_from_refresh_token(rt, redirect_uri)
+            token = json["access_token"]
+
+            # user_email = "dratnaras@itrsgroup.onmicrosoft.com"
+            response = send_email(token, user_email, to_recipients,body, subject)
+
+            c =  Context({'status_code' : response })
+
+            return HttpResponse(c)
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        # form = BookingUrlEmailForm(initial={'interest_rate': 3.5, 'number_of_years':5})
+        form = BookingUrlEmailForm()
+
+    return render(request, 'calender/dashboard_bookingUrl.html', {'form': form})
 
 @login_required
 def dashboard(request):
@@ -581,35 +615,4 @@ def getEventsDashboard(request):
     return HttpResponse(data, content_type='application/json')
     # return HttpResponse(context)
 
-def unsubscribe(request, username, token):
-    """
-    User is immediately unsubscribed if they are logged in as username, or
-    if they came from an unexpired unsubscribe link. Otherwise, they are
-    redirected to the login page and unsubscribed as soon as they log in.
-    """
 
-    user = get_object_or_404(User, username=username, is_active=True)
-
-    if ( (request.user.is_authenticated() and request.user == user) or
-             user.get_profile().check_token(token)):
-        # unsubscribe them
-        profile = user.get_profile()
-        profile.newsletter = False
-        profile.save()
-
-        return render(request, 'calender/unsubscribe.html')
-
-    # Otherwise redirect to login page
-    next_url = reverse('user_signups.views.unsubscribe',
-                       kwargs={'username': username, 'token': token,})
-    return HttpResponseRedirect('%s?next=%s' % (reverse('login'), next_url))
-
-# def bookingUrlGenerate(request):
-#
-#
-#     # context = {'token': token}
-#     return render(request, 'calender/dashboard_bookingUrl.html')
-#     # return HttpResponse('<p>'+token+'</p>')
-
-def dashboard_bookingUrl(request):
-    return render(request, 'calender/dashboard_bookingUrl.html')
