@@ -151,6 +151,7 @@ STATIC_URL = '/static/'
 # EMAIL_PORT='25'
 # EMAIL_USE_TLS= True
 
+
 SECURE_SSL_REDIRECT= False
 
 EMAIL_HOST='smtp.office365.com'

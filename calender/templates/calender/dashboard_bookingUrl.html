@@ -3,6 +3,7 @@
 
 {% block content %}
 
+
 <!-- Page Content -->
 <div id="page-wrapper">
     <div class="container-fluid">
@@ -22,15 +23,20 @@
                     Email Booking Link
                 </div>
                 <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form}}
-                        <p></p>
-                        <input type="submit" value="Send" class ="btn btn-primary"/>
-                    </form>
-                </div>
+                <form method="post">
+                    <div ng-app ng-init="name='Sir/Madam'; user='{{user.first_name}}'; host = '{{ request.get_host }}' " class="panel-body">
+                        <!--<label>Name:</label>-->
+                        <!--<input type="text" id="client_name" ng-model="name"  class="form-control">-->
+                        <!--<form method="post">-->
+                            {% csrf_token %}
+                            {{ form }}
+                            <p></p>
+                            <input type="submit" value="Send" class ="btn btn-primary"/>
+                        <!--</form>-->
+                    </div>
+                </form>
             </div>
+
             <!-- /.panel-body -->
         </div>
 
@@ -41,11 +47,20 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <button id = "generateLink" type="button" class="btn btn-primary btn-lg btn-block" onclick="generateLink()">Generate Booking Link</button>
-                    <p></p>
+                    <form id="form" name="form">
+                        <label>Name:</label>
+                        <input required type="text" name="fname" id="name" class="form-control" ><br>
+                        <label>Email:</label>
+                        <input required type="email" name="email" id ="email" class="form-control" ><br>
+                            <!--<input type="submit">-->
+                    </form>
+
+                    <button id = "generateLink" type="button" class="btn btn-primary btn-lg btn-block" onclick="generateLink()">Generate Booking Link</button><br>
+
+
                     <div id="link_div" style="display:none;" class="alert alert-success"  >
                         <!--<button type="button" class="close"  data-dismiss="alert" aria-hidden="true">&times;</button>-->
-                        {{ request.get_host }}/calender/booking/<p style="display:inline" id="token_insert"></p>
+                        https://{{ request.get_host }}/calender/booking/<p style="display:inline" id="token_insert"></p>
                     </div>
                 </div>
             </div>
@@ -57,26 +72,58 @@
 </div>
 <!-- /.container-fluid -->
 </div>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+
+
 <script>
+
+
+
     function generateLink() {
+
+        $("#form").validate({
+            rules: {
+                "fname": {
+                    required: true
+                }
+            }
+        });
+
+        if ($("#form").validate()) { //
+
+            var token;
+            name = document.getElementById("name").value;
+            email = document.getElementById("email").value;
+
+            $.ajax({
+                type: 'GET',
+                url: '/calender/dashboard/generatebookingurl/' + name + '/' + email,
+                success: function (data) {
+                    token = data.token.toString()
+//                console.log(token.toString())
+                    document.getElementById('token_insert').innerHTML = token.toString()
+                    document.getElementById('link_div').style.display = "block";
+
+                }
+            });
+        }
+    }
+    function generateLinkEmail(){
         var token;
         $.ajax({
             type: 'GET',
             url: '/calender/dashboard/generatebookingurl',
             success: function (data) {
                 token = data.token.toString()
-//                console.log(token.toString())
-                document.getElementById('token_insert').innerHTML= token.toString()
-                document.getElementById('link_div').style.display = "block";
-
+                return token
             }
         });
 
-
-
-
     }
+
+
 </script>
+
 
 
 {% endblock %}

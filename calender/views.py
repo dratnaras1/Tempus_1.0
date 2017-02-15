@@ -13,7 +13,7 @@ from django.template import Template
 from calender.mailHelper import *
 from .forms import ClientAppointmentForm, AppointmentFormAnalystDashboard, BookingUrlEmailForm
 from pyexchange import Exchange2010Service, ExchangeNTLMAuthConnection
-from datetime import datetime
+# from datetime import datetime
 from pytz import timezone
 from django.core.mail import EmailMessage
 from django.core.mail import send_mail
@@ -22,10 +22,14 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from calender.models import OutlookAuth, BookingToken
 from calender.helper import getUser, getUser_by_username
+from django.core.signing import Signer
 from calender.token import *
 import time
 import json
 import re
+import dateutil.parser
+import datetime
+
 
 from django.utils import six
 # Create your views here.
@@ -205,14 +209,35 @@ def dashboard_appointments(request):
     return render(request, 'calender/dashboard_appointments.html', {'form': form})
 
 def dashboard_bookingUrl(request):
+    if(not request.session['booking_url_token']):
+        request.session['booking_url_token'] = create_token_str_not_saved_in_db(request)
+
+    # request.session['booking_url_token'] \
+    print("initial "+ request.session['booking_url_token'])
+    body = "Hello {{name}},\n\n" \
+           "{{user}} is available for a technical site visit.\n\n" \
+           "If you would like to take us up on this offer please click on the link below and select a time that works best for you.\n\n" \
+           "https://{{ host }}/calender/booking/"+request.session['booking_url_token']+"\n\n" \
+           "Regards,\n\n" \
+           "{{user}} "
+    # print("dosplay"+ booking_url_token)
+    # +"https://{{ host }}/calender/booking/"+create_token_str(request)+"\n\n" + \
+
+
+
+    form = BookingUrlEmailForm(initial={'body':body})
+
+    # print("initial" + booking_url_token)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
+
+
         form = BookingUrlEmailForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
 
             to_recipients = form.cleaned_data['to_Recipients']
-            # carbon_copy = form.cleaned_data['carbon_copy']
+            client_name = form.cleaned_data['client_name']
             subject = form.cleaned_data['subject']
             body = form.cleaned_data['body']
 
@@ -224,9 +249,14 @@ def dashboard_bookingUrl(request):
             redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
             json = get_token_from_refresh_token(rt, redirect_uri)
             token = json["access_token"]
+            add_token_to_db(request.user, request.session['booking_url_token'], client_name, to_recipients)
+
+            # print("save"  + booking_url_token)
 
             # user_email = "dratnaras@itrsgroup.onmicrosoft.com"
             response = send_email(token, user_email, to_recipients,body, subject)
+            request.session['booking_url_token'] = None
+
 
             c =  Context({'status_code' : response })
 
@@ -234,15 +264,22 @@ def dashboard_bookingUrl(request):
     # if a GET (or any other method) we'll create a blank form
     else:
         # form = BookingUrlEmailForm(initial={'interest_rate': 3.5, 'number_of_years':5})
-        form = BookingUrlEmailForm()
+        # body = "Hello {{name}},\n\n" \
+        #        "{{user}} is available for a technical site visit.\n\n" \
+        #        "If you would like to take us up on this offer please click on the link below and select a time that works best for you.\n\n" \
+        #        "https://{{ host }}/calender/booking/"+request.session.get('booking_url_token')+"\n\n"\
+        #        "Regards,\n\n" \
+        #        "{{user}} "
+        # # print("dosplay"+ booking_url_token)
+        #        # +"https://{{ host }}/calender/booking/"+create_token_str(request)+"\n\n" + \
+        #
+        # form = BookingUrlEmailForm(initial={'body':body})
 
-    return render(request, 'calender/dashboard_bookingUrl.html', {'form': form})
+        return render(request, 'calender/dashboard_bookingUrl.html', {'form': form})
 
 @login_required
 def dashboard(request):
-    context = {'user':request.user.first_name}
-    print(request.user.first_name)
-    return render(request, 'calender/dashboard_home.html', context)
+    return render(request, 'calender/dashboard_home.html')
 
 
 @login_required
@@ -414,6 +451,11 @@ def clientBooking_for_user(request,username):
 
 def clientBooking_for_token(request,token):
     if check_token_valid(token):
+        name_token = get_clientName_from_token(token)
+        email_token = get_clientEmail_from_token(token)
+
+        # print(email)
+
         if (request.method == 'POST'):
             # create a form instance and populate it with data from the request:
 
@@ -423,8 +465,8 @@ def clientBooking_for_token(request,token):
                 # process the data in form.cleaned_data as required
                 # ...
                 # redirect to a new URL:
-                name = form.cleaned_data['name']
-                email = form.cleaned_data['email']
+                # name = name_token
+                # email = email_token
                 date = form.cleaned_data['date']
                 time = form.cleaned_data['time']
 
@@ -444,7 +486,7 @@ def clientBooking_for_token(request,token):
                 token = json["access_token"]
 
                 # user_email = "dratnaras@itrsgroup.onmicrosoft.com"
-                response = create_appointment(token, user_email, date, time, email, name)
+                response = create_appointment(token, user_email, date, time, email_token, name_token)
 
                 # send email to analyst
                 # send_mail(
@@ -469,7 +511,7 @@ def clientBooking_for_token(request,token):
             form = ClientAppointmentForm()
 
 
-        return render(request, 'calender/client_booking_bs', {'form': form})
+        return render(request, 'calender/client_booking_bs', {'form': form, 'name':name_token})
     else:
         return HttpResponse('<h1>Token expired</h1>')
 
@@ -553,20 +595,32 @@ def getTimes_for_user(request, token):
 
     for val in eventsVal:
         eventStart = val['Start']
-        eventStartDateTime = eventStart['DateTime']
+        eventStartDateTime = dateutil.parser.parse(str(eventStart['DateTime']))
         eventEnd = val['End']
-        eventEndDateTime = eventEnd['DateTime']
-
-        m = re.search('T\d\d.\d\d', eventStartDateTime)
-        if m:
-            found = m.group(0)
-            hourMinute = found[1:]
-            temp = hourMinute.split(":")
+        eventEndDateTime = dateutil.parser.parse(str(eventEnd['DateTime']))
+        print(str(eventStartDateTime) + "   " + str(eventEndDateTime))
+        # print(eventStartDateTime.isoformat())
+        while eventStartDateTime <= eventEndDateTime:
+            simplifiedTime = eventStartDateTime.strftime("%H:%M")
+            # time.append()
+            # print(eventStartDateTime.strftime("%H:%M"))
+            temp = simplifiedTime.split(":")
             time.append(temp)
+            eventStartDateTime+=datetime.timedelta(minutes=30)
+
+        # # m = re.search('T\d\d.\d\d', eventStartDateTime)
+        # m = re.search('T\d\d.\d\d', eventEndDateTime)
+        # if m:
+        #     found = m.group(0)
+        #     hourMinute = found[1:]
+        #     temp = hourMinute.split(":")
+        #     time.append(temp)
+
+
 
     # time = [['13','00'],['14','00']]
 
-    # print(time)
+    print(time)
     some_data_to_dump = {
         'time': time
     }

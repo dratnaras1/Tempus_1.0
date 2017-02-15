@@ -64,6 +64,7 @@
     <script src="{% static 'calender/dhtmlx/ext/dhtmlxscheduler_recurring.js' %}" type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'calender/dhtmlx/ext/dhtmlxscheduler_minical.js' %}" type="text/javascript" charset="utf-8"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
 
     <script type="text/javascript" charset="utf-8">
 
@@ -134,7 +135,6 @@
                     success: function (data) {
 //                    timeArr = data.timex
 //                    console.log(data.events)
-
                         for (i in data.events){
 //                            add the events to calender
 
@@ -166,7 +166,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html">Tempus</a>
+            <a class="navbar-brand" href="{% url 'calender:dashboard' %}">ITRS <strong>TEMPUS</strong></a>
         </div>
         <!-- /.navbar-header -->
 
@@ -486,13 +486,15 @@
                         <a href="{% url 'calender:dashboard' %}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                     </li>
                     <li>
-                        <a href="{% url 'calender:dashboardAppointments' %}"><i class="fa fa-calendar fa-fw"></i> Appointments</a>
+                        <a href="{% url 'calender:dashboardBookingUrl' %}"><i class="fa fa-key fa-fw"></i> Booking Link Generator</a>
+
                     </li>
                     <li>
                         <a href="{% url 'calender:routePlanner' %}"><i class="fa fa-wrench fa-fw"></i> Route Planner </a>
                     </li>
                     <li>
-                        <a href="{% url 'calender:dashboardBookingUrl' %}"><i class="fa fa-key fa-fw"></i> Booking Link Generator</a>
+                        <!--<a href="{% url 'calender:dashboardBookingUrl' %}"><i class="fa fa-key fa-fw"></i> Booking Link Generator</a>-->
+                        <a href="{% url 'calender:dashboardAppointments' %}"><i class="fa fa-calendar fa-fw"></i> Appointments</a>
                     </li>
                 </ul>
             </div>

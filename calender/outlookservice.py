@@ -1,7 +1,9 @@
 import requests
 import uuid
 import json
-from datetime import datetime, timedelta
+import dateutil.parser
+import datetime
+# from datetime import datetime, timedelta
 
 outlook_api_endpoint = 'https://outlook.office.com/api/v2.0{0}'
 
@@ -97,10 +99,18 @@ def create_appointment(access_token, user_email, date, time, email, name):
     get_events_url = outlook_api_endpoint.format('/Me/events')
     dateTime = date+"T"+time+":00"
     # make appointments an hour long
-    timeSplit = time.split(":")
-    endTime = int(timeSplit[0])+ 1
-    endTimeString = str(endTime)
-    endDateTime = date+"T"+endTimeString+":"+timeSplit[1]+":00"
+    # timeSplit = time.split(":")
+    # endTime = int(timeSplit[0])+ 1
+    # endTimeString = str(endTime)
+    # endDateTime = date+"T"+endTimeString+":"+timeSplit[1]+":00"
+
+    timeObject=dateutil.parser.parse(str(dateTime))
+    endTime = timeObject + datetime.timedelta(minutes=60)
+    endDateTime = endTime.isoformat()
+
+    travelTImeToSite = timeObject - datetime.timedelta(minutes=30)
+    travelTimeBack = endTime + datetime.timedelta(minutes=30)
+
     data= {
         "Subject": "Site Visit",
         "Body": {
@@ -126,7 +136,44 @@ def create_appointment(access_token, user_email, date, time, email, name):
         ]
     }
 
+    travelTImeToSite_Data = {
+        "Subject": "Travel Time to Site Visit",
+        "Body": {
+            "ContentType": "HTML",
+            "Content": "ITRS site visit"
+        },
+        "Start": {
+            "DateTime": travelTImeToSite.isoformat(),
+            "TimeZone": "GMT Standard Time"
+        },
+        "End": {
+            "DateTime": dateTime,
+            "TimeZone": "GMT Standard Time"
+        }
+
+    }
+
+    travelTimeBack_Data = {
+        "Subject": "Travel Time Back to Office",
+        "Body": {
+            "ContentType": "HTML",
+            "Content": "ITRS site visit"
+        },
+        "Start": {
+            "DateTime": endDateTime,
+            "TimeZone": "GMT Standard Time"
+        },
+        "End": {
+            "DateTime": travelTimeBack.isoformat(),
+            "TimeZone": "GMT Standard Time"
+        }
+    }
+
+
+
     r = make_api_call('POST',get_events_url, access_token, user_email, payload=data)
+    r = make_api_call('POST',get_events_url, access_token, user_email, payload=travelTImeToSite_Data)
+    r = make_api_call('POST',get_events_url, access_token, user_email, payload=travelTimeBack_Data)
 
     if (r.status_code == requests.codes.ok):
         return r.json(),date

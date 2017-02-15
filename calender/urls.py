@@ -29,7 +29,7 @@ urlpatterns = [
     # get booking url
     url(r'^dashboard/bookingurl/$', views.dashboard_bookingUrl, name='dashboardBookingUrl'),
     # generate booking URL
-    url(r'^dashboard/generatebookingurl/$', token.create_token, name='GenerateBookingUrl'),
+    url(r'^dashboard/generatebookingurl/(?P<name>[\w ]+)/(?P<email>[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)$', token.create_token, name='GenerateBookingUrl'),
     # client booking view ('/caldender/booking')
     # url(r'^booking/$', views.clientBooking, name='clientBooking')
     # url(r'^booking/$', views.clientBooking, name='clientBooking'),

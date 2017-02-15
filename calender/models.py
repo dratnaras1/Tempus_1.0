@@ -11,3 +11,5 @@ class BookingToken(models.Model):
     analyst = models.ForeignKey(OutlookAuth, on_delete=models.CASCADE)
     token = models.CharField(max_length = 254)
     used = models.BooleanField(default = False)
+    clientName = models.CharField(max_length = 254)
+    clientEmail = models.CharField(max_length = 254)
