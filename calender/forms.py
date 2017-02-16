@@ -28,7 +28,7 @@ class BookingUrlEmailForm(forms.Form):
     initial_subject= "ITRS Site Visit"
 
     client_name = forms.CharField(label = 'Name', max_length=100, widget=forms.TextInput(attrs={'class':'form-control', 'ng-model':'name' }))
-    to_Recipients = forms.EmailField(label = 'Email', max_length=100, widget=forms.TextInput(attrs={'class':'form-control'}))
+    to_Recipients = forms.EmailField(label = 'Email', max_length=100, widget=forms.TextInput(attrs={'class':'form-control', 'type':'email'}))
     # carbon_copy = forms.EmailField(label = 'CC', max_length=100, widget=forms.TextInput(attrs={'class':'form-control'}))
     subject = forms.CharField(label = 'Subject', max_length=100, initial=initial_subject, widget=forms.TextInput(attrs={'class':'form-control'}))
     body = forms.CharField( widget=forms.Textarea(attrs={'class':'form-control'}))

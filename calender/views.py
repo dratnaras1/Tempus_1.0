@@ -6,6 +6,7 @@ from calender.outlookservice import get_me, get_events_by_range
 from calender.outlookservice import create_appointment
 from calender.authhelper import get_signin_url, get_token_from_code, get_access_token, get_token_from_refresh_token
 from calender.outlookservice import  get_events_by_range, get_my_events,send_email
+from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import Context
@@ -209,23 +210,29 @@ def dashboard_appointments(request):
     return render(request, 'calender/dashboard_appointments.html', {'form': form})
 
 def dashboard_bookingUrl(request):
-    if(not request.session['booking_url_token']):
+    # s = SessionStore()
+    # if request.session.get('booking_url_token', False):
+    if request.session.get('booking_url_token', None) == None:
         request.session['booking_url_token'] = create_token_str_not_saved_in_db(request)
 
-    # request.session['booking_url_token'] \
-    print("initial "+ request.session['booking_url_token'])
     body = "Hello {{name}},\n\n" \
-           "{{user}} is available for a technical site visit.\n\n" \
-           "If you would like to take us up on this offer please click on the link below and select a time that works best for you.\n\n" \
-           "https://{{ host }}/calender/booking/"+request.session['booking_url_token']+"\n\n" \
-           "Regards,\n\n" \
-           "{{user}} "
+          "{{user}} is available for a technical site visit.\n\n" \
+          "If you would like to take us up on this offer please click on the link below and select a time that works best for you.\n\n" \
+          "https://{{ host }}/calender/booking/"+request.session.get('booking_url_token', None)+"\n\n" \
+          "Regards,\n\n" \
+          "{{user}} "
+    form = BookingUrlEmailForm(initial={'body':body})
+
+    # request.session['booking_url_token'] \
+    # print("initial "+ request.session['booking_url_token'])
+    # "https://{{ host }}/calender/booking/"+request.session['booking_url_token']+"\n\n" \
+
     # print("dosplay"+ booking_url_token)
     # +"https://{{ host }}/calender/booking/"+create_token_str(request)+"\n\n" + \
 
 
 
-    form = BookingUrlEmailForm(initial={'body':body})
+
 
     # print("initial" + booking_url_token)
     if request.method == 'POST':
@@ -487,6 +494,7 @@ def clientBooking_for_token(request,token):
 
                 # user_email = "dratnaras@itrsgroup.onmicrosoft.com"
                 response = create_appointment(token, user_email, date, time, email_token, name_token)
+                # statusCode = response.status
 
                 # send email to analyst
                 # send_mail(
@@ -502,7 +510,7 @@ def clientBooking_for_token(request,token):
                 # return HttpResponse('<h1>site visit booked, analyst will be in touch</h1>')
 
 
-                return HttpResponse(c)
+                return render(request, 'calender/client_booking_bs_response.html', c)
 
 
 

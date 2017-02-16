@@ -110,7 +110,7 @@
             <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 form-box">
                 <form role="form" action="" method="post" class="f1">
 
-                    <h3>TEMPUS Client Booking Page</h3>
+                    <h3>TEMPUS Site Visit Booking Page</h3>
                     <!--<p>Please fill in the fields to book an appointment</p>-->
                     <div class="f1-steps">
                         <div class="f1-progress">
@@ -124,35 +124,23 @@
                             <div class="f1-step-icon"><i class="fa fa-key"></i></div>
                             <p>Date</p>
                         </div>
-                        <!--<div class="f1-step">-->
-                             <!--<div class="f1-step-icon"><i class="fa fa-twitter"></i></div>-->
-                             <!--<p>social</p>-->
-                         <!--</div>-->
+                        <div class="f1-step">
+                             <div class="f1-step-icon"><i class="fa fa-check"></i></div>
+                             <p>Confirm</p>
+                         </div>
                     </div>
                     <form method="post">
                         {% csrf_token %}
                         <fieldset>
+                            <!--greeting-->
                             <div class="f1 form-box">
-                                <center><h3>Hello {{name}}! </h3></center>
-                                <center><p>Please fill in the fields to book an appointment</p></center>
+                                <center><h3>
+                                    <div id = "time_insert" style="display:inline"></div> {{name}}!
+                                </h3>
+                                </center>
+                                <center><p>Please select a free slot on the next page.</p><center>
                             </div>
-                            <!--<div class="form-group">-->
-                                <!--&lt;!&ndash;{{ form.form }}&ndash;&gt;-->
-                                <!--<label class="sr-only" for="{{ form.name.label }}">Name</label>-->
-                                <!--{{ form.name}}-->
-                                <!--&lt;!&ndash;<input type="text" name="f1-first-name" placeholder="First name..." class="f1-first-name form-control" id="f1-first-name">&ndash;&gt;-->
-                            <!--</div>-->
-                            <!--<div class="form-group">-->
-                                <!--<label class="sr-only" for="{{ form.email.label }}">Email</label>-->
-                                <!--{{ form.email}}-->
-                                <!--&lt;!&ndash;<input type="text" name="f1-last-name" placeholder="Last name..." class="f1-last-name form-control" id="f1-last-name">&ndash;&gt;-->
 
-                            <!--</div>-->
-                            <!--<div class="form-group">-->
-                                <!--<label class="sr-only" for="f1-about-yourself">About yourself</label>-->
-                                <!--<textarea name="f1-about-yourself" placeholder="About yourself..."-->
-                                          <!--class="f1-about-yourself form-control" id="f1-about-yourself"></textarea>-->
-                            <!--</div>-->
                             <div class="f1-buttons">
                                 <button type="button" class="btn btn-next">Next</button>
                             </div>
@@ -187,25 +175,11 @@
                             </div>
                         </fieldset>
 
-                     <!--<fieldset>-->
-                         <!--<h4>Confirm:</h4>-->
-                         <!--<div class="form-group">-->
-                             <!--<label class="sr-only" for="f1-facebook">Facebook</label>-->
-                             <!--<input type="text" name="f1-facebook" placeholder="Facebook..." class="f1-facebook form-control" id="f1-facebook">-->
-                         <!--</div>-->
-                         <!--<div class="form-group">-->
-                             <!--<label class="sr-only" for="f1-twitter">Twitter</label>-->
-                             <!--<input type="text" name="f1-twitter" placeholder="Twitter..." class="f1-twitter form-control" id="f1-twitter">-->
-                         <!--</div>-->
-                         <!--<div class="form-group">-->
-                             <!--<label class="sr-only" for="f1-google-plus">Google plus</label>-->
-                             <!--<input type="text" name="f1-google-plus" placeholder="Google plus..." class="f1-google-plus form-control" id="f1-google-plus">-->
-                         <!--</div>-->
-                         <!--<div class="f1-buttons">-->
-                             <!--<button type="button" class="btn btn-previous">Previous</button>-->
-                             <!--<button type="submit" class="btn btn-submit">Submit</button>-->
-                         <!--</div>-->
-                     <!--</fieldset>-->
+                     <fieldset>
+                         <h4>Confirm:</h4>
+                         {% block content %}
+                         {% endblock %}
+                     </fieldset>
 
                 </form>
             </div>
@@ -226,6 +200,17 @@
 
 
 $(document).ready(function() {
+
+    var today = new Date()
+    var curHr = today.getHours()
+
+    if (curHr < 12) {
+        document.getElementById('time_insert').innerHTML = 'Good morning,'
+    } else if (curHr < 18) {
+        document.getElementById('time_insert').innerHTML = 'Good afternoon,'
+    } else {
+        document.getElementById('time_insert').innerHTML = 'Good evening,'
+    }
 
     var dateToday = new Date();
     var $date = $('#f1-Date').pickadate({
@@ -270,7 +255,7 @@ $(document).ready(function() {
 
 
             dateSelect = datePicker.get('select', 'yyyy-mm-dd')
-            console.log(dateSelect)
+//            console.log(dateSelect)
             getTime()
 
 
@@ -284,7 +269,7 @@ $(document).ready(function() {
                     },
                     success: function (data) {
                         timeArr = data.time
-                        console.log(timeArr.toString())
+//                        console.log(timeArr.toString())
                         timePicker(timeArr)
                     }
                 });

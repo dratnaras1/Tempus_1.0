@@ -1,0 +1,172 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tempus</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+    <link rel="stylesheet" href="{% static 'calender/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'calender/form-bootstrap/assets/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'calender/form-bootstrap/assets/css/form-elements.css' %}">
+    <link rel="stylesheet" href="{% static 'calender/form-bootstrap/assets/css/style.css' %}">
+
+    <!--jdatepicker css-->
+    <link rel="stylesheet" href="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/themes/default.css' %}">
+    <link rel="stylesheet" href="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/themes/default.date.css' %}">
+    <link rel="stylesheet" href="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/themes/default.time.css' %}">
+
+    <!--JDatePicker-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+
+    <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.date.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.time.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/legacy.js' %}" type="text/javascript" charset="utf-8"></script>
+
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]-->
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <!--[endif]-->
+
+
+
+    <!-- Favicon and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static 'calender/form-bootstrap/assets/ico/apple-touch-icon-144-precomposed.png' %}">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static 'calender/form-bootstrap/assets/ico/apple-touch-icon-114-precomposed.png' %}">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static 'calender/form-bootstrap/assets/ico/apple-touch-icon-72-precomposed.png' %}">
+    <link rel="apple-touch-icon-precomposed" href="{% static 'calender/form-bootstrap/assets/ico/apple-touch-icon-57-precomposed.png' %}">
+
+</head>
+
+<body background="{% static 'calender/form-bootstrap/assets/img/backgrounds/1.jpg' %}">
+
+<!-- Top menu -->
+<!--<nav class="navbar navbar-inverse navbar-no-bg" role="navigation">-->
+<!--<div class="container">-->
+<!--<div class="navbar-header">-->
+<!--<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar-1">-->
+<!--<span class="sr-only">Toggle navigation</span>-->
+<!--<span class="icon-bar"></span>-->
+<!--<span class="icon-bar"></span>-->
+<!--<span class="icon-bar"></span>-->
+<!--</button>-->
+<!--&lt;!&ndash;<a class="navbar-brand" href="index.html">BootZard - Bootstrap Wizard Template</a>&ndash;&gt;-->
+<!--</div>-->
+<!--&lt;!&ndash; Collect the nav links, forms, and other content for toggling &ndash;&gt;-->
+<!--&lt;!&ndash;<div class="collapse navbar-collapse" id="top-navbar-1">&ndash;&gt;-->
+<!--&lt;!&ndash;<ul class="nav navbar-nav navbar-right">&ndash;&gt;-->
+<!--&lt;!&ndash;<li>&ndash;&gt;-->
+<!--&lt;!&ndash;<span class="li-text">&ndash;&gt;-->
+<!--&lt;!&ndash;Put some text or&ndash;&gt;-->
+<!--&lt;!&ndash;</span>&ndash;&gt;-->
+<!--&lt;!&ndash;<a href="#"><strong>links</strong></a>&ndash;&gt;-->
+<!--&lt;!&ndash;<span class="li-text">&ndash;&gt;-->
+<!--&lt;!&ndash;here, or some icons:&ndash;&gt;-->
+<!--&lt;!&ndash;</span>&ndash;&gt;-->
+<!--&lt;!&ndash;<&lt;!&ndash; span class="li-social">&ndash;&gt;-->
+<!--&lt;!&ndash;<a href="https://www.facebook.com/pages/Azmindcom/196582707093191" target="_blank"><i class="fa fa-facebook"></i></a>&ndash;&gt;-->
+<!--&lt;!&ndash;<a href="https://twitter.com/anli_zaimi" target="_blank"><i class="fa fa-twitter"></i></a>&ndash;&gt;-->
+<!--&lt;!&ndash;<a href="https://plus.google.com/+AnliZaimi_azmind" target="_blank"><i class="fa fa-google-plus"></i></a>&ndash;&gt;-->
+<!--&lt;!&ndash;<a href="https://github.com/AZMIND" target="_blank"><i class="fa fa-github"></i></a>&ndash;&gt;-->
+<!--&lt;!&ndash;</span> &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;</li>&ndash;&gt;-->
+<!--&lt;!&ndash;</ul>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--</div>-->
+<!--</nav>-->
+
+<!-- Top content -->
+<div class="top-content">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2 text">
+                <h1>ITRS <strong>TEMPUS</strong></h1>
+                <div class="description">
+                    <!--<p>-->
+                    <!--This is a free responsive Bootstrap form wizard.-->
+                    <!--Download it on <a href="http://azmind.com"><strong>AZMIND</strong></a>, customize and use it as you like!-->
+                    <!--</p>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 form-box">
+                <form role="form" action="" method="post" class="f1">
+
+                    <h3>TEMPUS Site Visit Booking Page</h3>
+                    <!--<p>Please fill in the fields to book an appointment</p>-->
+                    <div class="f1-steps">
+                        <div class="f1-progress">
+                            <div class="f1-progress-line" data-now-value="16.66" data-number-of-steps="2" style="width: 16.66%;"></div>
+                        </div>
+                        <div class="f1-step ">
+                            <div class="f1-step-icon"><i class="fa fa-user"></i></div>
+                            <p>about</p>
+                        </div>
+                        <div class="f1-step">
+                            <div class="f1-step-icon"><i class="fa fa-key"></i></div>
+                            <p>Date</p>
+                        </div>
+                        <div class="f1-step active">
+                            <div class="f1-step-icon"><i class="fa fa-check"></i></div>
+                            <p>Confirm</p>
+                        </div>
+                    </div>
+
+
+                        <fieldset>
+                            <h4>Confirm:</h4>
+                            {{ status_code }}
+                        </fieldset>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Javascript -->
+<!--jpicker-->
+
+
+
+
+<!--<script src="{% static 'calender/form-bootstrap/assets/js/jquery-1.11.1.min.js' %}"></script>-->
+<script src="{% static 'calender/form-bootstrap/assets/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'calender/form-bootstrap/assets/js/jquery.backstretch.min.js' %}"></script>
+<script src="{% static 'calender/form-bootstrap/assets/js/retina-1.1.0.min.js' %}"></script>
+<script src="{% static 'calender/form-bootstrap/assets/js/scripts.js' %}"></script>
+
+<!--&lt;!&ndash;[if lt IE 10]>-->
+<!--<script src="{% static 'calender/form-bootstrap/assets/js/placeholder.js' %}"></script>-->
+<!--<![endif]&ndash;&gt;-->
+
+
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
+
+
+
+</body>
+
+
+</html>

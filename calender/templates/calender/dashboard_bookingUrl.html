@@ -53,9 +53,10 @@
                         <label>Email:</label>
                         <input required type="email" name="email" id ="email" class="form-control" ><br>
                             <!--<input type="submit">-->
+                        <input id = "generateLink" type="submit" class="btn btn-primary btn-lg btn-block" value = "Generate Booking Link"/><br>
+
                     </form>
 
-                    <button id = "generateLink" type="button" class="btn btn-primary btn-lg btn-block" onclick="generateLink()">Generate Booking Link</button><br>
 
 
                     <div id="link_div" style="display:none;" class="alert alert-success"  >
@@ -77,49 +78,55 @@
 
 <script>
 
-
-
-    function generateLink() {
-
-        $("#form").validate({
-            rules: {
-                "fname": {
-                    required: true
-                }
-            }
-        });
-
-        if ($("#form").validate()) { //
-
-            var token;
-            name = document.getElementById("name").value;
-            email = document.getElementById("email").value;
-
-            $.ajax({
-                type: 'GET',
-                url: '/calender/dashboard/generatebookingurl/' + name + '/' + email,
-                success: function (data) {
-                    token = data.token.toString()
-//                console.log(token.toString())
-                    document.getElementById('token_insert').innerHTML = token.toString()
-                    document.getElementById('link_div').style.display = "block";
-
-                }
-            });
-        }
-    }
-    function generateLinkEmail(){
+    $("#form").submit(function(e) {
+        e.preventDefault();
         var token;
+        name = document.getElementById("name").value;
+        email = document.getElementById("email").value;
+
         $.ajax({
             type: 'GET',
-            url: '/calender/dashboard/generatebookingurl',
+            url: '/calender/dashboard/generatebookingurl/' + name + '/' + email,
             success: function (data) {
                 token = data.token.toString()
-                return token
+//                console.log(token.toString())
+                document.getElementById('token_insert').innerHTML = token.toString()
+                document.getElementById('link_div').style.display = "block";
+
             }
         });
+    });
 
-    }
+
+
+//    function generateLink() {
+//
+//        $("#form").validate({
+//            rules: {
+//                "fname": {
+//                    required: true
+//                }
+//            }
+//        });
+//
+//
+//        if ($("#form").validate()) { //
+//
+//
+//        }
+//    }
+//    function generateLinkEmail(){
+//        var token;
+//        $.ajax({
+//            type: 'GET',
+//            url: '/calender/dashboard/generatebookingurl',
+//            success: function (data) {
+//                token = data.token.toString()
+//                return token
+//            }
+//        });
+//
+//    }
 
 
 </script>
