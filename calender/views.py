@@ -84,7 +84,7 @@ def gettoken(request):
     #     oauth.auth_code = auth_code
     #     oauth.save()
 
-    ouath = OutlookAuth.objects.create(user_email = user['EmailAddress'], refresh_token = refresh_token, auth_code = auth_code)
+    ouath = OutlookAuth.objects.create(user_email = user['EmailAddress'], refresh_token = refresh_token, auth_code = auth_code, user = request.user)
 
     # expires_in is in seconds
     # Get current timestamp (seconds since Unix Epoch) and
@@ -158,7 +158,7 @@ def dashboard_appointments(request):
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
 
-        form = ClientAppointmentForm(request.POST)
+        form = AppointmentFormAnalystDashboard(request.POST)
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
@@ -203,7 +203,7 @@ def dashboard_appointments(request):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = ClientAppointmentForm()
+        form = AppointmentFormAnalystDashboard()
 
 
 
@@ -592,12 +592,7 @@ def getTimes_for_user(request, token):
     events =get_events_by_range(token, redirect_uri, convertStartDate, convertEndDate)
     # print(events.keys())
     eventsVal = events['value']
-    # # print(len(eventsVal))
-    # eventsDate = eventsVal[1]
-    # print(len(eventsDate))
-    # eventsDateStarts = eventsDate['Start']
-    # print(eventsDateStarts)
-    # json.loads(eventsVal)
+
 
     time = []
 
@@ -616,21 +611,52 @@ def getTimes_for_user(request, token):
             time.append(temp)
             eventStartDateTime+=datetime.timedelta(minutes=30)
 
-        # # m = re.search('T\d\d.\d\d', eventStartDateTime)
-        # m = re.search('T\d\d.\d\d', eventEndDateTime)
-        # if m:
-        #     found = m.group(0)
-        #     hourMinute = found[1:]
-        #     temp = hourMinute.split(":")
-        #     time.append(temp)
-
-
-
-    # time = [['13','00'],['14','00']]
 
     print(time)
     some_data_to_dump = {
         'time': time
+    }
+    data = json.dumps(some_data_to_dump)
+
+    return HttpResponse(data, content_type='application/json')
+
+def get_events_for_today(request):
+    oauth = getUser(request)
+
+    user_email = oauth.user_email
+    rt = oauth.refresh_token
+    redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
+    json_token = get_token_from_refresh_token(rt, redirect_uri)
+    token = json_token["access_token"]
+
+    todaysDate = time.strftime("%Y-%m-%d")
+    startTime = 'T09:00:00.0000000'
+    endTime = 'T17:30:00.0000000'
+    convertStartDate = todaysDate+startTime
+    convertEndDate = todaysDate+endTime
+
+    events=get_events_by_range(token, redirect_uri, convertStartDate, convertEndDate)
+
+    eventsArr = []
+    eventsVal = events['value']
+    for val in eventsVal:
+        subject = val['Subject']
+        eventStart = val['Start']
+        eventStartDateTime = eventStart['DateTime']
+        eventEnd = val['End']
+        eventEndDateTime = eventEnd['DateTime']
+        eventStartDateTime = eventStartDateTime.replace("T", " ")
+        eventEndDateTime = eventEndDateTime.replace("T", " ")
+        individualEvent = []
+        individualEvent.append(eventStartDateTime)
+        individualEvent.append(eventEndDateTime)
+        individualEvent.append(subject)
+        eventsArr.append(individualEvent)
+        # print(eventStartDateTime + eventEndDateTime )
+
+    # print(eventsArr)
+    some_data_to_dump = {
+        'events': eventsArr
     }
     data = json.dumps(some_data_to_dump)
 

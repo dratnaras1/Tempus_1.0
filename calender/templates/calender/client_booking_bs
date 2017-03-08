@@ -121,7 +121,7 @@
                             <p>about</p>
                         </div>
                         <div class="f1-step">
-                            <div class="f1-step-icon"><i class="fa fa-key"></i></div>
+                            <div class="f1-step-icon"><i class="fa fa-calendar"></i></div>
                             <p>Date</p>
                         </div>
                         <div class="f1-step">
@@ -235,7 +235,8 @@ $(document).ready(function() {
         min: [9, 00],
         max: [17, 00],
         formatSubmit: 'HH:i',
-        hiddenSuffix: ''
+        hiddenSuffix: '',
+        interval:120
     });
 
     var picker = $time.pickatime('picker')
@@ -263,7 +264,7 @@ $(document).ready(function() {
                 var timeArr;
                 $.ajax({
                     type: 'GET',
-                    url: '/calender/getTimes/'+token,
+                    url: '/calendar/getTimes/'+token,
                     data: {
                         "selectedDate": dateSelect
                     },

@@ -37,11 +37,13 @@ urlpatterns = [
     # booking by token
     url(r'^booking/(?P<token>[\w.:\-_=]+)$', views.clientBooking_for_token, name='clientBookingToken'),
     #Get avilable Times for appointment booking
-    # url(r'^getTimes/$', views.getTimes, name='getTimes'),
+    url(r'^getTimes/$', views.getTimes, name='getTimes'),
     # get times for user
     url(r'^getTimes/(?P<token>[\w.:\-_=]+)$', views.getTimes_for_user, name='getTimes_for_user'),
     # get events for dashboard view
     url(r'^getEventsDashboard/$', views.getEventsDashboard, name='getEventsDashboard'),
+    # get events for today
+    url(r'^getEventsForToday/$', views.get_events_for_today, name='getEventsForToday'),
     # url(r'^login/$', auth_views.login, name='login'),
     url(r'^login/$', auth_views.login, {'template_name':'calender/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, name='logout'),

@@ -61,7 +61,7 @@
 
                     <div id="link_div" style="display:none;" class="alert alert-success"  >
                         <!--<button type="button" class="close"  data-dismiss="alert" aria-hidden="true">&times;</button>-->
-                        https://{{ request.get_host }}/calender/booking/<p style="display:inline" id="token_insert"></p>
+                        https://{{ request.get_host }}/calendar/booking/<p style="display:inline" id="token_insert"></p>
                     </div>
                 </div>
             </div>
@@ -86,7 +86,7 @@
 
         $.ajax({
             type: 'GET',
-            url: '/calender/dashboard/generatebookingurl/' + name + '/' + email,
+            url: '/calendar/dashboard/generatebookingurl/' + name + '/' + email,
             success: function (data) {
                 token = data.token.toString()
 //                console.log(token.toString())
