@@ -30,6 +30,7 @@ import json
 import re
 import dateutil.parser
 import datetime
+from datetime import timedelta
 
 
 from django.utils import six
@@ -218,7 +219,7 @@ def dashboard_bookingUrl(request):
     body = "Hello {{name}},\n\n" \
           "{{user}} is available for a technical site visit.\n\n" \
           "If you would like to take us up on this offer please click on the link below and select a time that works best for you.\n\n" \
-          "https://{{ host }}/calender/booking/"+request.session.get('booking_url_token', None)+"\n\n" \
+          "https://{{ host }}/calendar/booking/"+request.session.get('booking_url_token', None)+"\n\n" \
           "Regards,\n\n" \
           "{{user}} "
     form = BookingUrlEmailForm(initial={'body':body})
@@ -345,116 +346,116 @@ def dashboard_routePlanner(request):
 #     return render(request, 'calender/client_booking.html', {'form': form})
 #
 
-def clientBooking(request):
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
+# def clientBooking(request):
+#     if request.method == 'POST':
+#         # create a form instance and populate it with data from the request:
+#
+#         form = ClientAppointmentForm(request.POST)
+#         # check whether it's valid:
+#         if form.is_valid():
+#             # process the data in form.cleaned_data as required
+#             # ...
+#             # redirect to a new URL:
+#             name = form.cleaned_data['name']
+#             email = form.cleaned_data['email']
+#             date = form.cleaned_data['date']
+#             time = form.cleaned_data['time']
+#
+#             oauth = OutlookAuth.objects.get(pk=1)
+#             auth_code = oauth.auth_code
+#             user_email = oauth.user_email
+#             rt = oauth.refresh_token
+#             redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
+#
+#
+#             json = get_token_from_refresh_token(rt, redirect_uri)
+#             token = json["access_token"]
+#
+#             # user_email = "dratnaras@itrsgroup.onmicrosoft.com"
+#             response = create_appointment(token, user_email, date, time, email, name)
+#
+#             # send email to analyst
+#             # send_mail(
+#             #     'New Site Visit Booking',
+#             #     name + ' has booked a new appointment with you on ' + date +' at ' +time,
+#             #     'tempus@itrsgroup.onmicrosoft.com',
+#             #     ['dratnaras@itrsgroup.com'],
+#             #     fail_silently=False,
+#             #  )
+#
+#             c =  Context({'status_code' : response })
+#
+#             # return HttpResponse('<h1>site visit booked, analyst will be in touch</h1>')
+#
+#
+#             return HttpResponse(c)
+#
+#
+#
+#     # if a GET (or any other method) we'll create a blank form
+#     else:
+#         form = ClientAppointmentForm()
+#
+#     # time = [[13,0],[14,0]]
+#
+#     return render(request, 'calender/client_booking_bs', {'form': form})
+#     # return render(request, 'calender/client_booking_bs', {'form': form, 'time': time})
 
-        form = ClientAppointmentForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            date = form.cleaned_data['date']
-            time = form.cleaned_data['time']
-
-            oauth = OutlookAuth.objects.get(pk=1)
-            auth_code = oauth.auth_code
-            user_email = oauth.user_email
-            rt = oauth.refresh_token
-            redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
-
-
-            json = get_token_from_refresh_token(rt, redirect_uri)
-            token = json["access_token"]
-
-            # user_email = "dratnaras@itrsgroup.onmicrosoft.com"
-            response = create_appointment(token, user_email, date, time, email, name)
-
-            # send email to analyst
-            # send_mail(
-            #     'New Site Visit Booking',
-            #     name + ' has booked a new appointment with you on ' + date +' at ' +time,
-            #     'tempus@itrsgroup.onmicrosoft.com',
-            #     ['dratnaras@itrsgroup.com'],
-            #     fail_silently=False,
-            #  )
-
-            c =  Context({'status_code' : response })
-
-            # return HttpResponse('<h1>site visit booked, analyst will be in touch</h1>')
-
-
-            return HttpResponse(c)
-
-
-
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = ClientAppointmentForm()
-
-    # time = [[13,0],[14,0]]
-
-    return render(request, 'calender/client_booking_bs', {'form': form})
-    # return render(request, 'calender/client_booking_bs', {'form': form, 'time': time})
-
-def clientBooking_for_user(request,username):
-    # print(username)
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-
-        form = ClientAppointmentForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            date = form.cleaned_data['date']
-            time = form.cleaned_data['time']
-
-            # oauth = OutlookAuth.objects.get(pk=1)
-            oauth = getUser_by_username(username)
-            auth_code = oauth.auth_code
-            user_email = oauth.user_email
-            rt = oauth.refresh_token
-            redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
-
-
-            json = get_token_from_refresh_token(rt, redirect_uri)
-            token = json["access_token"]
-
-            # user_email = "dratnaras@itrsgroup.onmicrosoft.com"
-            response = create_appointment(token, user_email, date, time, email, name)
-
-            # send email to analyst
-            # send_mail(
-            #     'New Site Visit Booking',
-            #     name + ' has booked a new appointment with you on ' + date +' at ' +time,
-            #     'tempus@itrsgroup.onmicrosoft.com',
-            #     ['dratnaras@itrsgroup.com'],
-            #     fail_silently=False,
-            #  )
-
-            c =  Context({'status_code' : response })
-
-            # return HttpResponse('<h1>site visit booked, analyst will be in touch</h1>')
-
-
-            return HttpResponse(c)
-
-
-
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = ClientAppointmentForm()
-
-    # time = [[13,0],[14,0]]
-
-    return render(request, 'calender/client_booking_bs', {'form': form})
+# def clientBooking_for_user(request,username):
+#     # print(username)
+#     if request.method == 'POST':
+#         # create a form instance and populate it with data from the request:
+#
+#         form = ClientAppointmentForm(request.POST)
+#         # check whether it's valid:
+#         if form.is_valid():
+#             # process the data in form.cleaned_data as required
+#             # ...
+#             # redirect to a new URL:
+#             name = form.cleaned_data['name']
+#             email = form.cleaned_data['email']
+#             date = form.cleaned_data['date']
+#             time = form.cleaned_data['time']
+#
+#             # oauth = OutlookAuth.objects.get(pk=1)
+#             oauth = getUser_by_username(username)
+#             auth_code = oauth.auth_code
+#             user_email = oauth.user_email
+#             rt = oauth.refresh_token
+#             redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
+#
+#
+#             json = get_token_from_refresh_token(rt, redirect_uri)
+#             token = json["access_token"]
+#
+#             # user_email = "dratnaras@itrsgroup.onmicrosoft.com"
+#             response = create_appointment(token, user_email, date, time, email, name)
+#
+#             # send email to analyst
+#             # send_mail(
+#             #     'New Site Visit Booking',
+#             #     name + ' has booked a new appointment with you on ' + date +' at ' +time,
+#             #     'tempus@itrsgroup.onmicrosoft.com',
+#             #     ['dratnaras@itrsgroup.com'],
+#             #     fail_silently=False,
+#             #  )
+#
+#             c =  Context({'status_code' : response })
+#
+#             # return HttpResponse('<h1>site visit booked, analyst will be in touch</h1>')
+#
+#
+#             return HttpResponse(c)
+#
+#
+#
+#     # if a GET (or any other method) we'll create a blank form
+#     else:
+#         form = ClientAppointmentForm()
+#
+#     # time = [[13,0],[14,0]]
+#
+#     return render(request, 'calender/client_booking_bs', {'form': form})
 
 def clientBooking_for_token(request,token):
     if check_token_valid(token):
@@ -506,6 +507,7 @@ def clientBooking_for_token(request,token):
                 #  )
 
                 c =  Context({'status_code' : response })
+                # print(c.str)
 
                 # return HttpResponse('<h1>site visit booked, analyst will be in touch</h1>')
 
@@ -562,7 +564,8 @@ def getTimes(request):
 
     # time = [['13','00'],['14','00']]
 
-    # print(time)
+
+        # print(time)
     some_data_to_dump = {
         'time': time
     }
@@ -601,18 +604,53 @@ def getTimes_for_user(request, token):
         eventStartDateTime = dateutil.parser.parse(str(eventStart['DateTime']))
         eventEnd = val['End']
         eventEndDateTime = dateutil.parser.parse(str(eventEnd['DateTime']))
-        print(str(eventStartDateTime) + "   " + str(eventEndDateTime))
         # print(eventStartDateTime.isoformat())
         while eventStartDateTime <= eventEndDateTime:
             simplifiedTime = eventStartDateTime.strftime("%H:%M")
             # time.append()
             # print(eventStartDateTime.strftime("%H:%M"))
             temp = simplifiedTime.split(":")
-            time.append(temp)
+            if temp not in time:
+                time.append(temp)
             eventStartDateTime+=datetime.timedelta(minutes=30)
 
 
-    print(time)
+    workingHours = [['9','00'],['9','30'], ['10', '00'], ['10', '30'],['11','00'],['11','30'],['12','00'],['12','30'],['13','00'],['13','30'],['14','00'],['14','30'],['15','00'],['15','30'],['16','00']]
+
+    #logic for only displaying times where clinet has time to get to and from the site vitist
+    for slot in workingHours:
+        timeObj = timedelta(hours = int(slot[0]), minutes = int(slot[1]))
+        time_minus_30 = timeObj - timedelta(minutes=30)
+        time_add_30 = timeObj + timedelta(minutes=30)
+        time_add_60 = timeObj + timedelta(minutes=60)
+        time_add_90 = timeObj + timedelta(minutes=90)
+
+        timesArr =[timeObj + timedelta(minutes=30), timeObj + timedelta(minutes=60), + timeObj+ timedelta(minutes=90)]
+
+        time_minus_30_Str = ':'.join(str(time_minus_30).split(':')[:2])
+        time_minus_30_arr = [time_minus_30_Str.split(':')[0],time_minus_30_Str.split(':')[1]]
+
+        time_add_30_Str = ':'.join(str(time_add_30).split(':')[:2])
+        time_add_30_arr = [time_add_30_Str.split(':')[0],time_add_30_Str.split(':')[1]]
+
+        time_add_60_Str = ':'.join(str(time_add_60).split(':')[:2])
+        time_add_60_arr = [time_add_60_Str.split(':')[0],time_add_60_Str.split(':')[1]]
+
+        time_add_90_Str = ':'.join(str(time_add_90).split(':')[:2])
+        time_add_90_arr = [time_add_90_Str.split(':')[0],time_add_90_Str.split(':')[1]]
+
+        if(time_add_30_arr in time or time_add_60_arr in time):
+            time.append(slot)
+            if(time_minus_30_arr in time or time_add_90_arr in time):
+                time.append(slot)
+        else:
+            continue
+
+
+    #
+    # time = [['9','00'],['9','30']]
+    #
+    # print(time)
     some_data_to_dump = {
         'time': time
     }

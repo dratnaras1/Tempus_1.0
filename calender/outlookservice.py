@@ -89,7 +89,6 @@ def get_events_by_range(access_token, user_email, start_datetime, end_datetime):
                         '$orderby': 'Start/DateTime ASC'}
 
     r = make_api_call('GET', get_events_url, access_token, user_email, parameters = query_parameters)
-
     if (r.status_code == requests.codes.ok):
         return r.json()
     else:
@@ -178,7 +177,8 @@ def create_appointment(access_token, user_email, date, time, email, name):
     if (r.status_code == requests.codes.ok):
         return r.json(),date
     else:
-        return "{0}: {1}".format(r.status_code, r.text)
+        # return "{0}: {1}".format(r.status_code, r.text)
+        return r.status_code
 
 def send_email(access_token, user_email, to_recipients,body, subject):
     send_email_url= outlook_api_endpoint.format('/Me/sendmail')
