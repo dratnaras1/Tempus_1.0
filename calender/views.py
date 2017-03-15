@@ -181,6 +181,8 @@ def dashboard_appointments(request):
             json = get_token_from_refresh_token(rt, redirect_uri)
             token = json["access_token"]
 
+
+
             # user_email = "dratnaras@itrsgroup.onmicrosoft.com"
             response = create_appointment(token, user_email, date, time, email, name)
 
@@ -477,6 +479,7 @@ def clientBooking_for_token(request,token):
                 # email = email_token
                 date = form.cleaned_data['date']
                 time = form.cleaned_data['time']
+                address = form.cleaned_data['address']
 
 
                 oauth = get_user_from_token(token)
@@ -493,8 +496,9 @@ def clientBooking_for_token(request,token):
                 json = get_token_from_refresh_token(rt, redirect_uri)
                 token = json["access_token"]
 
+
                 # user_email = "dratnaras@itrsgroup.onmicrosoft.com"
-                response = create_appointment(token, user_email, date, time, email_token, name_token)
+                response = create_appointment(token, user_email, date, time, email_token, name_token, address)
                 # statusCode = response.status
 
                 # send email to analyst

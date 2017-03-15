@@ -94,7 +94,7 @@ def get_events_by_range(access_token, user_email, start_datetime, end_datetime):
     else:
         return "{0}: {1}".format(r.status_code, r.text)
 
-def create_appointment(access_token, user_email, date, time, email, name):
+def create_appointment(access_token, user_email, date, time, email, name, address):
     get_events_url = outlook_api_endpoint.format('/Me/events')
     dateTime = date+"T"+time+":00"
     # make appointments an hour long
@@ -114,7 +114,8 @@ def create_appointment(access_token, user_email, date, time, email, name):
         "Subject": "Site Visit",
         "Body": {
             "ContentType": "HTML",
-            "Content": "ITRS site visit"
+            "Content": "ITRS site visit \n Location of Site Visit: \n" + address
+
         },
         "Start": {
             "DateTime": dateTime,
