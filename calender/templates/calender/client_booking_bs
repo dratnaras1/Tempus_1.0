@@ -10,7 +10,7 @@
     <title>Tempus</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
     <link rel="stylesheet" href="{% static 'calender/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'calender/form-bootstrap/assets/font-awesome/css/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'calender/form-bootstrap/assets/css/form-elements.css' %}">
@@ -25,8 +25,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 
     <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.js' %}" type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.date.js' %}" type="text/javascript" charset="utf-8"></script>
@@ -129,7 +129,7 @@
                             <p>Date</p>
                         </div>
                         <div class="f1-step">
-                            <div class="f1-step-icon"><i class="fa fa-calendar"></i></div>
+                            <div class="f1-step-icon"><i class="fa fa-map-marker"></i></div>
                             <p>Address</p>
                         </div>
                         <div class="f1-step">
@@ -270,7 +270,7 @@ $(document).ready(function() {
 
 
         open: function() {
-            console.log('Opened up!')
+
             picker.clear()
             picker.set('enable', true)
 //            $timePickerInput.clear()
@@ -301,7 +301,7 @@ $(document).ready(function() {
             }
 
             function timePicker(time) {
-                console.log(time[0]);
+
                 picker.set('disable', time)
                 $time.show()
                 NProgress.done();

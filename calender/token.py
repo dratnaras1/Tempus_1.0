@@ -51,9 +51,7 @@ def get_user_from_token(token):
 def create_token(request, name, email):
     # create a random url that is linked to analyst
     user= getUser(request)
-    # dump = str(request.user)+"^"+name+"^"+email
-    # print(dump)
-    # make each url unique
+
     signer = Signer(salt=time.time())
     key_token = signer.sign(request.user)
     key, token = key_token.split(":", 1)

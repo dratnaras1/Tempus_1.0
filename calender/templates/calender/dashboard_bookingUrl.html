@@ -31,7 +31,7 @@
                             {% csrf_token %}
                             {{ form }}
                             <p></p>
-                            <input type="submit" value="Send" class ="btn btn-primary"/>
+                            <input type="submit" value="Send" class ="btn btn-primary" onclick="status_alert()"/>
                         <!--</form>-->
                     </div>
                 </form>
@@ -97,39 +97,27 @@
         });
     });
 
+    function status_alert() {
+        alert("Email sent");
+
+        status = "{{status_code}}";
+
+        if(status != ""){
+            alert(status);
+            status = "";
+        }
 
 
-//    function generateLink() {
-//
-//        $("#form").validate({
-//            rules: {
-//                "fname": {
-//                    required: true
-//                }
-//            }
-//        });
-//
-//
-//        if ($("#form").validate()) { //
-//
-//
-//        }
-//    }
-//    function generateLinkEmail(){
-//        var token;
-//        $.ajax({
-//            type: 'GET',
-//            url: '/calender/dashboard/generatebookingurl',
-//            success: function (data) {
-//                token = data.token.toString()
-//                return token
-//            }
-//        });
-//
-//    }
+    }
+
+
+
+
+
 
 
 </script>
+
 
 
 

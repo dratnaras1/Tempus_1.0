@@ -25,8 +25,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 
     <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.js' %}" type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.date.js' %}" type="text/javascript" charset="utf-8"></script>
@@ -94,7 +94,7 @@
                             <p>Address</p>
                         </div>
                         <div class="f1-step active" >
-                            <div class="f1-step-icon"><i class="fa fa-check"></i></div>
+                            <div class="f1-step-icon"><i class="fa fa-map-marker"></i></div>
                             <p>Confirm</p>
                         </div>
                     </div>
@@ -103,11 +103,11 @@
                             <center><h3>Status:</h3></center>
                             {% if  status_code  == 201 or status_code  == 200 %}
                                 <div class="description">
-                                    <center><p>A booking has successfully been created.</p></center>
+                                    <center><p>A booking has successfully been created. You will receive an email shortly.</p></center>
                                 </div>
                             {% else %}
                                     <div class="description">
-                                        <center><p>Oops look like an error has occured. Please contact the analyst via email.</p></center>
+                                        <center><p>Oops look like an error has occurred. Please contact the analyst via email.</p></center>
                                     </div>
                             {% endif %}
                         </fieldset>

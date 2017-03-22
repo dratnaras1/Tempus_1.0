@@ -4,6 +4,86 @@
 
 {% block content%}
 
+<script type="text/javascript" charset="utf-8">
+
+    function init() {
+        scheduler.config.api_date="%Y-%m-%d %H:%i";
+        scheduler.config.show_loading = true;
+        scheduler.config.readonly = true;
+
+
+
+        NProgress.start();
+        scheduler.init('scheduler_here', new Date(), "month");
+
+        getDashboardEvents();
+        getTodaysSchedule();
+
+
+        function getDashboardEvents() {
+            $.ajax({
+                type: 'GET',
+                url: '/calendar/getEventsDashboard/',
+                success: function (data) {
+                    //                    timeArr = data.timex
+                    //                    console.log(data.events)
+                    for (i in data.events){
+                        //                            add the events to calender
+
+                        scheduler.addEvent(data.events[i][0],data.events[i][1],data.events[i][2] )
+
+                    }
+                    NProgress.done();
+                }
+
+            });
+        }
+
+        function getTodaysSchedule() {
+            $.ajax({
+                type: 'GET',
+                url: '/calendar/getEventsForToday/',
+                success: function (data) {
+
+                    //                    timeArr = data.timex
+                    //                    console.log(data.events)
+                    x = data.events.length;
+                    console.log(x)
+                    if(x==0){
+                        var html = '<div  class="list-group-item"> \
+                                    <i class="fa fa-comment fa-fw"></i> No events today \
+                                    <span class="pull-right text-muted small"><em>\
+                                    </em></span>\
+                                    </div>'
+
+                        $(document.getElementById("event_block_insert")).append( html );
+                    }
+                    else {
+
+                        for (i in data.events) {
+                            //                            add the events to calender
+                            var time = new Date(data.events[i][0]).toLocaleTimeString()
+                            var html = '<div  class="list-group-item"> \
+                                    <i class="fa fa-comment fa-fw"></i> ' + data.events[i][2] + '\
+                                    <span class="pull-right text-muted small"><em>' + time + '\
+                                    </em></span>\
+                                    </div>'
+
+                            $(document.getElementById("event_block_insert")).append(html);
+
+                        }
+                    }
+                }
+            });
+        }
+
+    }
+
+
+
+
+</script>
+
 <!-- Page Content -->
 <div id="page-wrapper">
     <div class="container-fluid">
@@ -47,25 +127,6 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="fa fa-bar-chart-o fa-fw"></i> Schedule
-                    <div class="pull-right">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                Actions
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu pull-right" role="menu">
-                                <li><a href="#">Action</a>
-                                </li>
-                                <li><a href="#">Another action</a>
-                                </li>
-                                <li><a href="#">Something else here</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body" style="width: 100%; height: 500px;">

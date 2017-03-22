@@ -55,17 +55,7 @@ def home(request):
         # return render(request, 'calender/index.html' , c)
         return render(request, 'calender/dashboard_outlookSync.html' , c)
 #
-# @login_required
-# def index(request):
-#     # Check if user has connected app with their outlook, if not direct to connection page
-#     try:
-#         outh = OutlookAuth.objects.get(user_email=request.user.email)
-#         return dashboard(request)
-#     except ObjectDoesNotExist:
-#         redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
-#         sign_in_url = get_signin_url(redirect_uri)
-#         c = Context({'sign_in_url': sign_in_url})
-#         return render(request, 'calender/index.html' , c)
+
 
 def gettoken(request):
     auth_code = request.GET['code']
@@ -77,13 +67,6 @@ def gettoken(request):
     user = get_me(access_token)
     refresh_token = token['refresh_token']
     expires_in = token['expires_in']
-    # create outlook object
-    # oauth= OutlookAuth.objects.get(pk=1)
-    # oauth.user_email= user['EmailAddress']
-    # oauth.refresh_token = refresh_token
-    # if(oauth.auth_code != auth_code):
-    #     oauth.auth_code = auth_code
-    #     oauth.save()
 
     ouath = OutlookAuth.objects.create(user_email = user['EmailAddress'], refresh_token = refresh_token, auth_code = auth_code, user = request.user)
 
@@ -155,6 +138,7 @@ def schedule(request):
 # def dashboard(request):
 #     return render(request, 'calender/dashboardTest.html')
 
+@login_required
 def dashboard_appointments(request):
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -212,6 +196,7 @@ def dashboard_appointments(request):
 
     return render(request, 'calender/dashboard_appointments.html', {'form': form})
 
+@login_required
 def dashboard_bookingUrl(request):
     # s = SessionStore()
     # if request.session.get('booking_url_token', False):
@@ -268,9 +253,12 @@ def dashboard_bookingUrl(request):
             request.session['booking_url_token'] = None
 
 
-            c =  Context({'status_code' : response })
+            c =  Context({'status_code' : response,
+                          'form': form})
 
-            return HttpResponse(c)
+            # return HttpResponse("<script>alert('message sent')</script>")
+            return render(request, 'calender/dashboard_bookingUrl.html', c)
+            # return HttpResponse(status=204)
     # if a GET (or any other method) we'll create a blank form
     else:
         # form = BookingUrlEmailForm(initial={'interest_rate': 3.5, 'number_of_years':5})
@@ -297,167 +285,7 @@ def dashboard_routePlanner(request):
     # context = {'user':request.user}
     return render(request, 'calender/dashboard_routePlanner.html')
 
-# def clientBooking(request):
-#     return render(request, 'calender/client_booking.html')
 
-# def clientBooking(request):
-#
-#     access_token = get_access_token(request, request.build_absolute_uri(reverse('calender:gettoken')))
-#     user_email = request.session['user_email']
-#
-#     if request.method == 'POST':
-#         # create a form instance and populate it with data from the request:
-#         form = ClientAppointmentForm(request.POST)
-#         # check whether it's valid:
-#         if form.is_valid():
-#             # process the data in form.cleaned_data as required
-#             # ...
-#             # redirect to a new URL:
-#             name = form.cleaned_data['name']
-#             email = form.cleaned_data['email']
-#             date = form.cleaned_data['date']
-#             time = form.cleaned_data['time']
-#             if not access_token:
-#                 return HttpResponseRedirect(reverse('calender:home'))
-#             else:
-#
-#              response = create_appointment(access_token, user_email, date, time, email, name)
-#              send_mail(
-#                  'Subject here',
-#                  'Here is the message.',
-#                  'dratnaras@itrsgroup.onmicrosoft.com',
-#                  ['dratnaras@itrsgroup.com'],
-#                  fail_silently=False,
-#              )
-#              c =  Context({'status_code' : response })
-#
-#
-#
-#              return HttpResponse(c)
-#
-#
-#                 # Test
-#                 # dateTime = date+"T"+time+":00"
-#                 # context = Context({"dateTime_test": dateTime})
-#                 # return HttpResponse(context)
-#
-#     # if a GET (or any other method) we'll create a blank form
-#     else:
-#         form = ClientAppointmentForm()
-#
-#     return render(request, 'calender/client_booking.html', {'form': form})
-#
-
-# def clientBooking(request):
-#     if request.method == 'POST':
-#         # create a form instance and populate it with data from the request:
-#
-#         form = ClientAppointmentForm(request.POST)
-#         # check whether it's valid:
-#         if form.is_valid():
-#             # process the data in form.cleaned_data as required
-#             # ...
-#             # redirect to a new URL:
-#             name = form.cleaned_data['name']
-#             email = form.cleaned_data['email']
-#             date = form.cleaned_data['date']
-#             time = form.cleaned_data['time']
-#
-#             oauth = OutlookAuth.objects.get(pk=1)
-#             auth_code = oauth.auth_code
-#             user_email = oauth.user_email
-#             rt = oauth.refresh_token
-#             redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
-#
-#
-#             json = get_token_from_refresh_token(rt, redirect_uri)
-#             token = json["access_token"]
-#
-#             # user_email = "dratnaras@itrsgroup.onmicrosoft.com"
-#             response = create_appointment(token, user_email, date, time, email, name)
-#
-#             # send email to analyst
-#             # send_mail(
-#             #     'New Site Visit Booking',
-#             #     name + ' has booked a new appointment with you on ' + date +' at ' +time,
-#             #     'tempus@itrsgroup.onmicrosoft.com',
-#             #     ['dratnaras@itrsgroup.com'],
-#             #     fail_silently=False,
-#             #  )
-#
-#             c =  Context({'status_code' : response })
-#
-#             # return HttpResponse('<h1>site visit booked, analyst will be in touch</h1>')
-#
-#
-#             return HttpResponse(c)
-#
-#
-#
-#     # if a GET (or any other method) we'll create a blank form
-#     else:
-#         form = ClientAppointmentForm()
-#
-#     # time = [[13,0],[14,0]]
-#
-#     return render(request, 'calender/client_booking_bs', {'form': form})
-#     # return render(request, 'calender/client_booking_bs', {'form': form, 'time': time})
-
-# def clientBooking_for_user(request,username):
-#     # print(username)
-#     if request.method == 'POST':
-#         # create a form instance and populate it with data from the request:
-#
-#         form = ClientAppointmentForm(request.POST)
-#         # check whether it's valid:
-#         if form.is_valid():
-#             # process the data in form.cleaned_data as required
-#             # ...
-#             # redirect to a new URL:
-#             name = form.cleaned_data['name']
-#             email = form.cleaned_data['email']
-#             date = form.cleaned_data['date']
-#             time = form.cleaned_data['time']
-#
-#             # oauth = OutlookAuth.objects.get(pk=1)
-#             oauth = getUser_by_username(username)
-#             auth_code = oauth.auth_code
-#             user_email = oauth.user_email
-#             rt = oauth.refresh_token
-#             redirect_uri = request.build_absolute_uri(reverse('calender:gettoken'))
-#
-#
-#             json = get_token_from_refresh_token(rt, redirect_uri)
-#             token = json["access_token"]
-#
-#             # user_email = "dratnaras@itrsgroup.onmicrosoft.com"
-#             response = create_appointment(token, user_email, date, time, email, name)
-#
-#             # send email to analyst
-#             # send_mail(
-#             #     'New Site Visit Booking',
-#             #     name + ' has booked a new appointment with you on ' + date +' at ' +time,
-#             #     'tempus@itrsgroup.onmicrosoft.com',
-#             #     ['dratnaras@itrsgroup.com'],
-#             #     fail_silently=False,
-#             #  )
-#
-#             c =  Context({'status_code' : response })
-#
-#             # return HttpResponse('<h1>site visit booked, analyst will be in touch</h1>')
-#
-#
-#             return HttpResponse(c)
-#
-#
-#
-#     # if a GET (or any other method) we'll create a blank form
-#     else:
-#         form = ClientAppointmentForm()
-#
-#     # time = [[13,0],[14,0]]
-#
-#     return render(request, 'calender/client_booking_bs', {'form': form})
 
 def clientBooking_for_token(request,token):
     if check_token_valid(token):

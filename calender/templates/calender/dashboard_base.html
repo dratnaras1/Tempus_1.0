@@ -44,15 +44,18 @@
         <link rel="stylesheet" href="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/themes/default.date.css' %}">
         <link rel="stylesheet" href="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/themes/default.time.css' %}">
 
-
+        <!--progress bar-->
+        <!--Progress bar-->
+        <script src="{% static 'calender/nprogress/nprogress.js' %}"></script>
+        <link rel='stylesheet' href="{% static 'calender/nprogress/nprogress.css' %}"/>
 
 
         <!--JDatePicker-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-        <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+        <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="https://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 
         <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.js' %}" type="text/javascript" charset="utf-8"></script>
         <script src="{% static 'calender/date-picker/pickadate.js-3.5.6/lib/picker.date.js' %}" type="text/javascript" charset="utf-8"></script>
@@ -68,134 +71,13 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
 
-        <script type="text/javascript" charset="utf-8">
 
-            function init() {
-                scheduler.config.api_date="%Y-%m-%d %H:%i";
-                scheduler.config.show_loading = true;
-                scheduler.config.readonly = true;
-
-    //  scheduler.config.multi_day = true;
-
-    //            scheduler.config.event_duration = 35;
-    //            scheduler.config.xml_date = "%Y-%m-%d %H:%i";
-    //            scheduler.("%Y-%m-%d %H:%i");
-
-    //            scheduler.config.occurrence_timestamp_in_utc = true;
-    //            scheduler.config.include_end_by = true;
-    //            scheduler.config.repeat_precise = true;
-    //            scheduler.xy.scale_height = 30;
-
-    //            scheduler.config.dateFormat = "%Y-%m-%d %H:%i";
-    //            scheduler.attachEvent("onLightbox", function(){
-    //                var lightbox_form = scheduler.getLightbox(); // this will generate lightbox form
-    //                var inputs = lightbox_form.getElementsByTagName('input');
-    //                var date_of_end = null;
-    //                for (var i=0; i<inputs.length; i++) {
-    //                    if (inputs[i].name == "date_of_end") {
-    //                        date_of_end = inputs[i];
-    //                        break;
-    //                    }
-    //                }
-    //
-    //                var repeat_end_date_format = scheduler.date.date_to_str(scheduler.config.repeat_date);
-    //                var show_minical = function(){
-    //                    if (scheduler.isCalendarVisible())
-    //                        scheduler.destroyCalendar();
-    //                    else {
-    //                        scheduler.renderCalendar({
-    //                            position:date_of_end,
-    //                            date: scheduler.getState().date,
-    //                            navigation:true,
-    //                            handler:function(date,calendar) {
-    //                                date_of_end.value = repeat_end_date_format(date);
-    //                                scheduler.destroyCalendar()
-    //                            }
-    //                        });
-    //                    }
-    //                };
-    //                date_of_end.onclick = show_minical;
-    //            });
-    //
-    //
-    //
-    //            scheduler.config.lightbox.sections = [
-    //                { name:"description", height:200, map_to:"text", type:"textarea" , focus:true },
-    //                { name:"recurring", type:"recurring", map_to:"rec_type", button:"recurring" },
-    //                { name:"time", height:72, type:"calendar_time", map_to:"auto" }
-    //            ];
-
-
-
-
-                scheduler.init('scheduler_here', new Date(), "month");
-                getDashboardEvents();
-                getTodaysSchedule();
-                function getDashboardEvents() {
-                    $.ajax({
-                        type: 'GET',
-                        url: '/calendar/getEventsDashboard/',
-                        success: function (data) {
-    //                    timeArr = data.timex
-    //                    console.log(data.events)
-                            for (i in data.events){
-    //                            add the events to calender
-
-                                scheduler.addEvent(data.events[i][0],data.events[i][1],data.events[i][2] )
-
-                            }
-                        }
-                    });
-                }
-
-                function getTodaysSchedule() {
-                    $.ajax({
-                        type: 'GET',
-                        url: '/calendar/getEventsForToday/',
-                        success: function (data) {
-
-    //                    timeArr = data.timex
-    //                    console.log(data.events)
-                            x = data.events.length;
-                            console.log(x)
-                            if(x==0){
-                                var html = '<div  class="list-group-item"> \
-                                    <i class="fa fa-comment fa-fw"></i> No events today \
-                                    <span class="pull-right text-muted small"><em>\
-                                    </em></span>\
-                                    </div>'
-
-                                $(document.getElementById("event_block_insert")).append( html );
-                            }
-                            else {
-
-                                for (i in data.events) {
-    //                            add the events to calender
-                                    var time = new Date(data.events[i][0]).toLocaleTimeString()
-                                    var html = '<div  class="list-group-item"> \
-                                    <i class="fa fa-comment fa-fw"></i> ' + data.events[i][2] + '\
-                                    <span class="pull-right text-muted small"><em>' + time + '\
-                                    </em></span>\
-                                    </div>'
-
-                                    $(document.getElementById("event_block_insert")).append(html);
-
-                                }
-                            }
-                        }
-                    });
-                }
-
-            }
-
-
-
-        </script>
 
 
     </head>
 
     <body  onload="init();">
+
     <div id="loading-bar-container"></div>
     <div id="wrapper">
 
@@ -213,195 +95,7 @@
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
-                <!--<li class="dropdown">-->
-                <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">-->
-                <!--<i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>-->
-                <!--</a>-->
-                <!--<ul class="dropdown-menu dropdown-messages">-->
-                <!--<li>-->
-                <!--<a href="#">-->
-                <!--<div>-->
-                <!--<strong>John Smith</strong>-->
-                <!--<span class="pull-right text-muted">-->
-                <!--<em>Yesterday</em>-->
-                <!--</span>-->
-                <!--</div>-->
-                <!--<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="divider"></li>-->
-                <!--<li>-->
-                <!--<a href="#">-->
-                <!--<div>-->
-                <!--<strong>John Smith</strong>-->
-                <!--<span class="pull-right text-muted">-->
-                <!--<em>Yesterday</em>-->
-                <!--</span>-->
-                <!--</div>-->
-                <!--<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="divider"></li>-->
-                <!--<li>-->
-                <!--<a href="#">-->
-                <!--<div>-->
-                <!--<strong>John Smith</strong>-->
-                <!--<span class="pull-right text-muted">-->
-                <!--<em>Yesterday</em>-->
-                <!--</span>-->
-                <!--</div>-->
-                <!--<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="divider"></li>-->
-                <!--<li>-->
-                <!--<a class="text-center" href="#">-->
-                <!--<strong>Read All Messages</strong>-->
-                <!--<i class="fa fa-angle-right"></i>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--</ul>-->
-                <!--&lt;!&ndash; /.dropdown-messages &ndash;&gt;-->
-                <!--</li>-->
-                <!--&lt;!&ndash; /.dropdown &ndash;&gt;-->
-                <!--<li class="dropdown">-->
-                <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">-->
-                <!--<i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>-->
-                <!--</a>-->
-                <!--<ul class="dropdown-menu dropdown-tasks">-->
-                <!--<li>-->
-                <!--<a href="#">-->
-                <!--<div>-->
-                <!--<p>-->
-                <!--<strong>Task 1</strong>-->
-                <!--<span class="pull-right text-muted">40% Complete</span>-->
-                <!--</p>-->
-                <!--<div class="progress progress-striped active">-->
-                <!--<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">-->
-                <!--<span class="sr-only">40% Complete (success)</span>-->
-                <!--</div>-->
-                <!--</div>-->
-                <!--</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="divider"></li>-->
-                <!--<li>-->
-                <!--<a href="#">-->
-                <!--<div>-->
-                <!--<p>-->
-                <!--<strong>Task 2</strong>-->
-                <!--<span class="pull-right text-muted">20% Complete</span>-->
-                <!--</p>-->
-                <!--<div class="progress progress-striped active">-->
-                <!--<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">-->
-                <!--<span class="sr-only">20% Complete</span>-->
-                <!--</div>-->
-                <!--</div>-->
-                <!--</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="divider"></li>-->
-                <!--<li>-->
-                <!--<a href="#">-->
-                <!--<div>-->
-                <!--<p>-->
-                <!--<strong>Task 3</strong>-->
-                <!--<span class="pull-right text-muted">60% Complete</span>-->
-                <!--</p>-->
-                <!--<div class="progress progress-striped active">-->
-                <!--<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">-->
-                <!--<span class="sr-only">60% Complete (warning)</span>-->
-                <!--</div>-->
-                <!--</div>-->
-                <!--</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="divider"></li>-->
-                <!--<li>-->
-                <!--<a href="#">-->
-                <!--<div>-->
-                <!--<p>-->
-                <!--<strong>Task 4</strong>-->
-                <!--<span class="pull-right text-muted">80% Complete</span>-->
-                <!--</p>-->
-                <!--<div class="progress progress-striped active">-->
-                <!--<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">-->
-                <!--<span class="sr-only">80% Complete (danger)</span>-->
-                <!--</div>-->
-                <!--</div>-->
-                <!--</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="divider"></li>-->
-                <!--<li>-->
-                <!--<a class="text-center" href="#">-->
-                <!--<strong>See All Tasks</strong>-->
-                <!--<i class="fa fa-angle-right"></i>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--</ul>-->
-                <!--&lt;!&ndash; /.dropdown-tasks &ndash;&gt;-->
-                <!--</li>-->
-                <!--&lt;!&ndash; /.dropdown &ndash;&gt;-->
-                <!--<li class="dropdown">-->
-                <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">-->
-                <!--<i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>-->
-                <!--</a>-->
-                <!--<ul class="dropdown-menu dropdown-alerts">-->
-                <!--<li>-->
-                <!--<a href="#">-->
-                <!--<div>-->
-                <!--<i class="fa fa-comment fa-fw"></i> New Comment-->
-                <!--<span class="pull-right text-muted small">4 minutes ago</span>-->
-                <!--</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="divider"></li>-->
-                <!--<li>-->
-                <!--<a href="#">-->
-                <!--<div>-->
-                <!--<i class="fa fa-twitter fa-fw"></i> 3 New Followers-->
-                <!--<span class="pull-right text-muted small">12 minutes ago</span>-->
-                <!--</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="divider"></li>-->
-                <!--<li>-->
-                <!--<a href="#">-->
-                <!--<div>-->
-                <!--<i class="fa fa-envelope fa-fw"></i> Message Sent-->
-                <!--<span class="pull-right text-muted small">4 minutes ago</span>-->
-                <!--</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="divider"></li>-->
-                <!--<li>-->
-                <!--<a href="#">-->
-                <!--<div>-->
-                <!--<i class="fa fa-tasks fa-fw"></i> New Task-->
-                <!--<span class="pull-right text-muted small">4 minutes ago</span>-->
-                <!--</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="divider"></li>-->
-                <!--<li>-->
-                <!--<a href="#">-->
-                <!--<div>-->
-                <!--<i class="fa fa-upload fa-fw"></i> Server Rebooted-->
-                <!--<span class="pull-right text-muted small">4 minutes ago</span>-->
-                <!--</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="divider"></li>-->
-                <!--<li>-->
-                <!--<a class="text-center" href="#">-->
-                <!--<strong>See All Alerts</strong>-->
-                <!--<i class="fa fa-angle-right"></i>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--</ul>-->
-                <!--&lt;!&ndash; /.dropdown-alerts &ndash;&gt;-->
-                <!--</li>-->
+
                 <!-- /.dropdown -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -436,94 +130,7 @@
                             </div>
                             <!-- /input-group -->
                         </li>
-                        <!--<li>-->
-                        <!--<a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>-->
-                        <!--</li>-->
-                        <!--&lt;!&ndash;side bar items:&ndash;&gt;-->
-                        <!--<li>-->
-                        <!--<a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>-->
-                        <!--<ul class="nav nav-second-level">-->
-                        <!--<li>-->
-                        <!--<a href="flot.html">Flot Charts</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<a href="morris.html">Morris.js Charts</a>-->
-                        <!--</li>-->
-                        <!--</ul>-->
-                        <!--&lt;!&ndash; /.nav-second-level &ndash;&gt;-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>-->
-                        <!--<ul class="nav nav-second-level">-->
-                        <!--<li>-->
-                        <!--<a href="panels-wells.html">Panels and Wells</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<a href="buttons.html">Buttons</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<a href="notifications.html">Notifications</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<a href="typography.html">Typography</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<a href="icons.html"> Icons</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<a href="grid.html">Grid</a>-->
-                        <!--</li>-->
-                        <!--</ul>-->
-                        <!--&lt;!&ndash; /.nav-second-level &ndash;&gt;-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>-->
-                        <!--<ul class="nav nav-second-level">-->
-                        <!--<li>-->
-                        <!--<a href="#">Second Level Item</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<a href="#">Second Level Item</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<a href="#">Third Level <span class="fa arrow"></span></a>-->
-                        <!--<ul class="nav nav-third-level">-->
-                        <!--<li>-->
-                        <!--<a href="#">Third Level Item</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<a href="#">Third Level Item</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<a href="#">Third Level Item</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<a href="#">Third Level Item</a>-->
-                        <!--</li>-->
-                        <!--</ul>-->
-                        <!--&lt;!&ndash; /.nav-third-level &ndash;&gt;-->
-                        <!--</li>-->
-                        <!--</ul>-->
-                        <!--&lt;!&ndash; /.nav-second-level &ndash;&gt;-->
-                        <!--</li>-->
-                        <!--<li class="active">-->
-                        <!--<a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>-->
-                        <!--<ul class="nav nav-second-level">-->
-                        <!--<li>-->
-                        <!--<a class="active" href="blank.html">Blank Page</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                        <!--<a href="login.html">Login Page</a>-->
-                        <!--</li>-->
-                        <!--</ul>-->
-                        <!--&lt;!&ndash; /.nav-second-level &ndash;&gt;-->
-                        <!--</li>-->
+
                         <li>
                             <a href="{% url 'calender:dashboard' %}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
@@ -547,117 +154,12 @@
 
         <!-- Page Content -->
         {% block content %}{% endblock %}
-        <!--<div id="page-wrapper">-->
-            <!--<div class="container-fluid">-->
-                <!--<div class="row">-->
-                    <!--<div class="col-lg-12">-->
-                        <!--<h1 class="page-header">Dashboard</h1>-->
-                    <!--</div>-->
-                    <!--&lt;!&ndash; /.col-lg-12 &ndash;&gt;-->
-                <!--</div>-->
-                <!--&lt;!&ndash; /.row &ndash;&gt;-->
-            <!--</div>-->
 
-            <!--<div class="row">-->
-                <!--<div class="col-lg-8">-->
-                    <!--<div class="panel panel-default">-->
-                    <!--<div class="panel-heading">-->
-                    <!--<i class="fa fa-bar-chart-o fa-fw"></i> Area Chart Example-->
-                    <!--<div class="pull-right">-->
-
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--<div style="width: 800px; height: 500px;">-->
-                    <!--<div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>-->
-                    <!--<div class="dhx_cal_navline">-->
-                    <!--<div class="dhx_cal_prev_button">&nbsp;</div>-->
-                    <!--<div class="dhx_cal_next_button">&nbsp;</div>-->
-                    <!--<div class="dhx_cal_today_button"></div>-->
-                    <!--<div class="dhx_cal_date"></div>-->
-                    <!--<div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>-->
-                    <!--<div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>-->
-                    <!--<div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>-->
-                    <!--</div>-->
-                    <!--<div class="dhx_cal_header">-->
-                    <!--</div>-->
-                    <!--<div class="dhx_cal_data">-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="panel panel-default">-->
-                        <!--<div class="panel-heading">-->
-                            <!--<i class="fa fa-bar-chart-o fa-fw"></i> Schedule-->
-                            <!--<div class="pull-right">-->
-                                <!--<div class="btn-group">-->
-                                    <!--<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">-->
-                                        <!--Actions-->
-                                        <!--<span class="caret"></span>-->
-                                    <!--</button>-->
-                                    <!--<ul class="dropdown-menu pull-right" role="menu">-->
-                                        <!--<li><a href="#">Action</a>-->
-                                        <!--</li>-->
-                                        <!--<li><a href="#">Another action</a>-->
-                                        <!--</li>-->
-                                        <!--<li><a href="#">Something else here</a>-->
-                                        <!--</li>-->
-                                        <!--<li class="divider"></li>-->
-                                        <!--<li><a href="#">Separated link</a>-->
-                                        <!--</li>-->
-                                    <!--</ul>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--&lt;!&ndash; /.panel-heading &ndash;&gt;-->
-                        <!--<div class="panel-body" style="width: 100%; height: 500px;">-->
-                            <!--&lt;!&ndash;<div id="morris-area-chart">&ndash;&gt;-->
-                            <!--&lt;!&ndash;SCHEDULER&ndash;&gt;-->
-                            <!--<div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>-->
-                                <!--<div class="dhx_cal_navline">-->
-                                    <!--<div class="dhx_cal_prev_button">&nbsp;</div>-->
-                                    <!--<div class="dhx_cal_next_button">&nbsp;</div>-->
-                                    <!--<div class="dhx_cal_today_button"></div>-->
-                                    <!--<div class="dhx_cal_date"></div>-->
-                                    <!--<div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>-->
-                                    <!--<div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>-->
-                                    <!--<div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>-->
-                                <!--</div>-->
-                                <!--<div class="dhx_cal_header">-->
-                                <!--</div>-->
-                                <!--<div class="dhx_cal_data">-->
-                                <!--</div>-->
-                            <!--</div>-->
-
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                        <!--</div>-->
-                        <!--&lt;!&ndash; /.panel-body &ndash;&gt;-->
-                    <!--</div>-->
-
-                <!--</div>-->
-            <!--</div>-->
-            <!-- /.container-fluid -->
-        <!--</div>-->
         <!-- /#page-wrapper -->
 
     </div>
     <!-- /#wrapper -->
 
-    <!-- jQuery -->
-    <!--<script src="{% static 'calender/dashboard-bootstrap/vendor/jquery/jquery.min.js'%}"></script>-->
-
-    <!--&lt;!&ndash; Bootstrap Core JavaScript &ndash;&gt;-->
-    <!--<script src="{% static 'calender/dashboard-bootstrap/vendor/bootstrap/js/bootstrap.min.js'%}"></script>-->
-
-    <!--&lt;!&ndash; Metis Menu Plugin JavaScript &ndash;&gt;-->
-    <!--<script src="{% static 'calender/dashboard-bootstrap/vendor/metisMenu/metisMenu.min.js'%}"></script>-->
-
-    <!--&lt;!&ndash; Custom Theme JavaScript &ndash;&gt;-->
-    <!--<script src="{% static 'calender/dashboard-bootstrap/dist/js/sb-admin-2.js' %}"></script>-->
-
-
-
-    <!-- Bootstrap Core JavaScript -->
-    <!--<script src="{% static 'calender/dashboard-bootstrap/vendor/bootstrap/js/bootstrap.min.js'%}"></script>-->
 
     <!-- Metis Menu Plugin JavaScript -->
     <script src="{% static 'calender/dashboard-bootstrap/vendor/metisMenu/metisMenu.min.js'%}"></script>
