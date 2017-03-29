@@ -17,6 +17,16 @@
     </div>
 
     <div class="row">
+        <!--Print error or success messages for email -->
+        {% for message in messages %}
+        <div class=" col-lg-12 alert {{ message.tags }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+        {% endfor %}
+
         <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -31,7 +41,7 @@
                             {% csrf_token %}
                             {{ form }}
                             <p></p>
-                            <input type="submit" value="Send" class ="btn btn-primary" onclick="status_alert()"/>
+                            <input type="submit" value="Send" class ="btn btn-primary"/>
                         <!--</form>-->
                     </div>
                 </form>
@@ -97,21 +107,6 @@
         });
     });
 
-
-</script>
-<script type="text/javascript">
-        function status_alert() {
-            alert("Email sent");
-
-            status = "{{status_code}}";
-
-            if(status != ""){
-                alert(status);
-                status = "";
-            }
-
-
-        }
 
 </script>
 

@@ -31,6 +31,10 @@ import re
 import dateutil.parser
 import datetime
 from datetime import timedelta
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.shortcuts import render, redirect
 
 
 from django.utils import six
@@ -41,6 +45,8 @@ from django.utils import six
 #     sign_in_url = get_signin_url(redirect_uri)
 #     print("signinurl:" +  sign_in_url)
 #     return HttpResponse('<a href="' + sign_in_url +'">Click here to sign in and view your mail</a>')
+
+
 
 @login_required
 def home(request):
@@ -257,7 +263,11 @@ def dashboard_bookingUrl(request):
                           'form': form})
 
             # return HttpResponse("<script>alert('message sent')</script>")
-            return render(request, 'calender/dashboard_bookingUrl.html', c)
+            messages.success(request, 'Email Sent!')
+            return redirect('calender:dashboardBookingUrl')
+        else:
+            messages.error(request, 'Unable to send email')
+            # return render(request, 'calender/dashboard_bookingUrl.html', c)
             # return HttpResponse(status=204)
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -284,6 +294,24 @@ def dashboard(request):
 def dashboard_routePlanner(request):
     # context = {'user':request.user}
     return render(request, 'calender/dashboard_routePlanner.html')
+
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('calender:change_password')
+        else:
+            messages.error(request, 'Please correct the error')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'calender/dashboard_change_password.html', {
+        'form': form
+    })
 
 
 

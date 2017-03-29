@@ -28,6 +28,8 @@ urlpatterns = [
     url(r'^dashboard/routeplanner/$', views.dashboard_routePlanner, name='routePlanner'),
     # get booking url
     url(r'^dashboard/bookingurl/$', views.dashboard_bookingUrl, name='dashboardBookingUrl'),
+    # change password
+    url(r'^dashboard/change_password/$', views.change_password, name='change_password'),
     # generate booking URL
     url(r'^dashboard/generatebookingurl/(?P<name>[\w ]+)/(?P<email>[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)$', token.create_token, name='GenerateBookingUrl'),
     # client booking view ('/caldender/booking')

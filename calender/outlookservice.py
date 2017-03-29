@@ -133,7 +133,8 @@ def create_appointment(access_token, user_email, date, time, email, name, addres
                 },
                 "Type": "Required"
             }
-        ]
+        ],
+        "ShowAs": "Busy"
     }
 
     travelTImeToSite_Data = {
@@ -149,7 +150,8 @@ def create_appointment(access_token, user_email, date, time, email, name, addres
         "End": {
             "DateTime": dateTime,
             "TimeZone": "GMT Standard Time"
-        }
+        },
+        "ShowAs": "Busy"
 
     }
 
@@ -166,7 +168,8 @@ def create_appointment(access_token, user_email, date, time, email, name, addres
         "End": {
             "DateTime": travelTimeBack.isoformat(),
             "TimeZone": "GMT Standard Time"
-        }
+        },
+        "ShowAs": "Busy"
     }
 
 
