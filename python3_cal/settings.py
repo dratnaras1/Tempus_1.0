@@ -27,7 +27,7 @@ SECRET_KEY = 'e+hfgn6@yxn^b*g7&ol1^15=ke11_+z_(&^ne-yik&_(j7qd*&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['tempus.com', '192.168.10.129', 'localhost', 'tempus.itrsgroup.com']
+ALLOWED_HOSTS = ['tempus.com', '192.168.10.129', 'localhost', 'tempus.itrsgroup.com', 'testserver']
 
 
 # Application definition
