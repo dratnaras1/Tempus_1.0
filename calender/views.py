@@ -460,19 +460,20 @@ def getTimes_for_user(request, token):
     time = []
 
     for val in eventsVal:
-        eventStart = val['Start']
-        eventStartDateTime = dateutil.parser.parse(str(eventStart['DateTime']))
-        eventEnd = val['End']
-        eventEndDateTime = dateutil.parser.parse(str(eventEnd['DateTime']))
-        # print(eventStartDateTime.isoformat())
-        while eventStartDateTime <= eventEndDateTime:
-            simplifiedTime = eventStartDateTime.strftime("%H:%M")
-            # time.append()
-            # print(eventStartDateTime.strftime("%H:%M"))
-            temp = simplifiedTime.split(":")
-            if temp not in time:
-                time.append(temp)
-            eventStartDateTime+=datetime.timedelta(minutes=30)
+        if val['ShowAs'] != 'Free':
+            eventStart = val['Start']
+            eventStartDateTime = dateutil.parser.parse(str(eventStart['DateTime']))
+            eventEnd = val['End']
+            eventEndDateTime = dateutil.parser.parse(str(eventEnd['DateTime']))
+            # print(eventStartDateTime.isoformat())
+            while eventStartDateTime <= eventEndDateTime:
+                simplifiedTime = eventStartDateTime.strftime("%H:%M")
+                # time.append()
+                # print(eventStartDateTime.strftime("%H:%M"))
+                temp = simplifiedTime.split(":")
+                if temp not in time:
+                    time.append(temp)
+                eventStartDateTime+=datetime.timedelta(minutes=30)
 
 
     workingHours = [['9','00'],['9','30'], ['10', '00'], ['10', '30'],['11','00'],['11','30'],['12','00'],['12','30'],['13','00'],['13','30'],['14','00'],['14','30'],['15','00'],['15','30'],['16','00']]

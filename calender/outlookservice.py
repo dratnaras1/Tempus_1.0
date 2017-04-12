@@ -63,7 +63,7 @@ def get_my_events(access_token, user_email):
     query_parameters = {
                         '$top': '2500',
                         '$select': 'Subject,Start,End',
-                        '$orderby': 'Start/DateTime ASC'}
+                        '$orderby': 'Start/DateTime'}
 
     r = make_api_call('GET', get_events_url, access_token, user_email, parameters = query_parameters)
 
@@ -85,8 +85,9 @@ def get_events_by_range(access_token, user_email, start_datetime, end_datetime):
                         'StartDateTime' : start_datetime,
                         'EndDateTime' : end_datetime,
                         # '$select': 'Subject,Start,End',
-                        '$select': 'Subject,Start,End',
-                        '$orderby': 'Start/DateTime ASC'}
+                        # 'ShowAs' : 'WorkingElsewhere,Oof,Busy,Tentative',
+                        '$select': 'Subject,Start,End,ShowAs',
+                        '$orderby': 'Start/DateTime'}
 
     r = make_api_call('GET', get_events_url, access_token, user_email, parameters = query_parameters)
     if (r.status_code == requests.codes.ok):
@@ -134,7 +135,7 @@ def create_appointment(access_token, user_email, date, time, email, name, addres
                 "Type": "Required"
             }
         ],
-        "ShowAs": "Busy"
+        "ShowAs": "Oof"
     }
 
     travelTImeToSite_Data = {
@@ -151,7 +152,7 @@ def create_appointment(access_token, user_email, date, time, email, name, addres
             "DateTime": dateTime,
             "TimeZone": "GMT Standard Time"
         },
-        "ShowAs": "Busy"
+        "ShowAs": "Oof"
 
     }
 
@@ -169,7 +170,7 @@ def create_appointment(access_token, user_email, date, time, email, name, addres
             "DateTime": travelTimeBack.isoformat(),
             "TimeZone": "GMT Standard Time"
         },
-        "ShowAs": "Busy"
+        "ShowAs": "Oof"
     }
 
 
