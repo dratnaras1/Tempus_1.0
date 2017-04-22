@@ -16,6 +16,15 @@
     </div>
 
     <div class="row">
+        <!--Print error or success messages -->
+        {% for message in messages %}
+        <div class=" col-lg-12 alert {{ message.tags }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+        {% endfor %}
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -87,23 +96,7 @@
 
                 dateSelect = datePicker.get('select', 'yyyy-mm-dd')
                 console.log(dateSelect)
-                getTime()
 
-
-                function getTime() {
-                    var timeArr;
-                    $.ajax({
-                        type: 'GET',
-                        url: '/calendar/getTimes/',
-                        data: {
-                            "selectedDate": dateSelect
-                        },
-                        success: function (data) {
-                            timeArr = data.time
-                            timePicker(timeArr)
-                        }
-                    });
-                }
 
                 function timePicker(time) {
 

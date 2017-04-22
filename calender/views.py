@@ -159,6 +159,7 @@ def dashboard_appointments(request):
             email = form.cleaned_data['email']
             date = form.cleaned_data['date']
             time = form.cleaned_data['time']
+            address = form.cleaned_data['address']
 
             oauth = getUser(request)
             # oauth = OutlookAuth.objects.get(pk=1)
@@ -174,7 +175,7 @@ def dashboard_appointments(request):
 
 
             # user_email = "dratnaras@itrsgroup.onmicrosoft.com"
-            response = create_appointment(token, user_email, date, time, email, name)
+            response = create_appointment(token, user_email, date, time, email, name, address)
 
             # send email to analyst
             # send_mail(
@@ -186,11 +187,10 @@ def dashboard_appointments(request):
             #     )
             #
             c =  Context({'status_code' : response })
-            #
-            # return HttpResponse('<h1>site visit booked, analyst will be in touch</h1>')
-            #
-            #
-            return HttpResponse(c)
+            messages.success(request, 'Appointment Created!')
+            return redirect('calender:dashboardAppointments')
+        else:
+            messages.error(request, 'Unable to create appointment')
 
 
 

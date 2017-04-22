@@ -57,7 +57,7 @@ ROOT_URLCONF = 'python3_cal.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "calender/templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

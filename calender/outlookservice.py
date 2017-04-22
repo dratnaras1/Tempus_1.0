@@ -13,7 +13,9 @@ def make_api_call(method, url, token, user_email, payload = None, parameters = N
     headers = { 'User-Agent' : 'python_tutorial/1.0',
                 'Authorization' : 'Bearer {0}'.format(token),
                 'Accept' : 'application/json',
-                'X-AnchorMailbox' : user_email }
+                'X-AnchorMailbox' : user_email,
+                'Prefer': 'outlook.timezone="Europe/London"'
+                }
 
     # Use these headers to instrument calls. Makes it easier
     # to correlate requests and responses in case of problems
@@ -63,7 +65,8 @@ def get_my_events(access_token, user_email):
     query_parameters = {
                         '$top': '2500',
                         '$select': 'Subject,Start,End',
-                        '$orderby': 'Start/DateTime'}
+
+                        }
 
     r = make_api_call('GET', get_events_url, access_token, user_email, parameters = query_parameters)
 
@@ -84,10 +87,9 @@ def get_events_by_range(access_token, user_email, start_datetime, end_datetime):
     query_parameters = {'$top': '2500',
                         'StartDateTime' : start_datetime,
                         'EndDateTime' : end_datetime,
-                        # '$select': 'Subject,Start,End',
-                        # 'ShowAs' : 'WorkingElsewhere,Oof,Busy,Tentative',
                         '$select': 'Subject,Start,End,ShowAs',
-                        '$orderby': 'Start/DateTime'}
+                        '$orderby': 'Start/DateTime',
+                        '$TimeZone': 'GMT Standard Time'}
 
     r = make_api_call('GET', get_events_url, access_token, user_email, parameters = query_parameters)
     if (r.status_code == requests.codes.ok):
@@ -112,7 +114,7 @@ def create_appointment(access_token, user_email, date, time, email, name, addres
     travelTimeBack = endTime + datetime.timedelta(minutes=30)
 
     data= {
-        "Subject": "Site Visit",
+        "Subject": "ITRS Site Visit",
         "Body": {
             "ContentType": "HTML",
             "Content": "ITRS site visit \n Location of Site Visit: \n" + address

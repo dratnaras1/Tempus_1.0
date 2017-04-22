@@ -24,6 +24,7 @@ class AppointmentFormAnalystDashboard(forms.Form):
     email = forms.EmailField(label = 'Email', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Email ...','name' : 'f1-email', 'class' : 'f1-email form-control', 'id' : 'f1-email'}))
     date = forms.CharField(label = 'Date', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Date ...','name' : 'f1-Date', 'class' : 'f1-Date form-control', 'id' : 'f1-Date'}))
     time = forms.CharField(label = 'Time', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Time ...','name' : 'f1-time', 'class' : 'f1-time form-control', 'id' : 'f1-Time'}))
+    address = forms.CharField(label = 'Address', widget=forms.Textarea(attrs={'placeholder': 'Address ...','name' : 'f1-about-yourself', 'class' : 'f1-about-yourself form-control', 'id' : 'f1-about-yourself'}))
 
 class BookingUrlEmailForm(forms.Form):
     initial_subject= "ITRS Site Visit"
