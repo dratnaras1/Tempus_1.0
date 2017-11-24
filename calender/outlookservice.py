@@ -1,9 +1,13 @@
+####################################################################################################################
+# Created by Daniel Ratnaras ITRS Group Ltd
+####################################################################################################################
+
 import requests
 import uuid
 import json
 import dateutil.parser
 import datetime
-# from datetime import datetime, timedelta
+
 
 outlook_api_endpoint = 'https://outlook.office.com/api/v2.0{0}'
 

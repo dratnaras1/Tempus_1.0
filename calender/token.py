@@ -1,14 +1,13 @@
+####################################################################################################################
+# Created by Daniel Ratnaras ITRS Group Ltd
+####################################################################################################################
+
 from calender.models import OutlookAuth, BookingToken
 from calender.models import OutlookAuth
 from django.http import Http404
-from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseRedirect
 from calender.helper import getUser, getUser_by_username
-from calender.forms import BookingLinkGeneratorForm
 from django.core.signing import Signer
-from django.core import signing
 import time
 from django.http import HttpResponse, HttpResponseRedirect
 import json
@@ -32,21 +31,6 @@ def get_user_from_token(token):
     except ObjectDoesNotExist:
         raise Http404("error")
 
-# def create_token(request):
-#     # create a random url that is linked to analyst
-#     user= getUser(request)
-#     # make each url unique
-#     signer = Signer(salt=time.time())
-#     username_token = signer.sign(request.user)
-#     username, token = username_token.split(":", 1)
-#     token_obect = BookingToken(analyst=user, token=token, used=False)
-#     token_obect.save()
-#     some_data_to_dump = {
-#         'token': token
-#     }
-#     data = json.dumps(some_data_to_dump)
-#
-#     return HttpResponse(data, content_type='application/json')
 
 def create_token(request, name, email):
     # create a random url that is linked to analyst
@@ -64,7 +48,6 @@ def create_token(request, name, email):
     data = json.dumps(some_data_to_dump)
 
     return HttpResponse(data, content_type='application/json')
-
 
 
 def create_token_str_not_saved_in_db(request):

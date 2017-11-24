@@ -1,29 +1,17 @@
-from django.shortcuts import render
+####################################################################################################################
+# Created by Daniel Ratnaras ITRS Group Ltd
+####################################################################################################################
+
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from calender.authhelper import get_signin_url, get_token_from_code, get_temp_access_token
-from calender.outlookservice import get_me, get_events_by_range
+from calender.outlookservice import get_me
 from calender.outlookservice import create_appointment
-from calender.authhelper import get_signin_url, get_token_from_code, get_access_token, get_token_from_refresh_token
+from calender.authhelper import get_signin_url, get_token_from_code,get_token_from_refresh_token
 from calender.outlookservice import  get_events_by_range, get_my_events,send_email
-from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response
 from django.template import Context
-from django.template import Template
-from calender.mailHelper import *
 from .forms import ClientAppointmentForm, AppointmentFormAnalystDashboard, BookingUrlEmailForm
-from pyexchange import Exchange2010Service, ExchangeNTLMAuthConnection
-# from datetime import datetime
-from pytz import timezone
-from django.core.mail import EmailMessage
-from django.core.mail import send_mail
-from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.models import User
-from calender.models import OutlookAuth, BookingToken
-from calender.helper import getUser, getUser_by_username
-from django.core.signing import Signer
 from calender.token import *
 import time
 import json
@@ -38,15 +26,6 @@ from django.shortcuts import render, redirect
 
 
 from django.utils import six
-# Create your views here.
-# def home(request):
-#     redirect_uri = request.build_absolute_uri(reverse('gettoken'))
-#     print(redirect_uri)
-#     sign_in_url = get_signin_url(redirect_uri)
-#     print("signinurl:" +  sign_in_url)
-#     return HttpResponse('<a href="' + sign_in_url +'">Click here to sign in and view your mail</a>')
-
-
 
 @login_required
 def home(request):
@@ -91,58 +70,6 @@ def gettoken(request):
 
     return dashboard(request)
     # return HttpResponse('User Email: {0}, Access token: {1}'.format(user['EmailAddress'], access_token))
-
-def gettempttoken(request):
-    auth_code = request.GET['code']
-    redirect_uri = request.build_absolute_uri(reverse('calender:gettemptoken'))
-    token = get_token_from_code(auth_code, redirect_uri)
-    access_token = token['access_token']
-    user = get_me(access_token)
-    expires_in = token['expires_in']
-
-    # expires_in is in seconds
-    # Get current timestamp (seconds since Unix Epoch) and
-    # add expires_in to get expiration time
-    # Subtract 5 minutes to allow for clock differences
-    expiration = int(time.time()) + expires_in - 30
-
-    # Save the token in the session
-    request.session['access_token'] = access_token
-    request.session['token_expires'] = expiration
-    request.session['user_email'] = user['EmailAddress']
-    return HttpResponse('User Email: {0}, Access token: {1}'.format(user['EmailAddress'], access_token))
-
-def events(request):
-    access_token = get_access_token(request, request.build_absolute_uri(reverse('calender:gettoken')))
-    user_email = request.session['user_email']
-    # print(user_email)
-    # If there is no token in the session, redirect to home
-    if not access_token:
-        return HttpResponseRedirect(reverse('calender:home'))
-    else:
-        events = get_my_events(access_token, user_email)
-        # events = get_events_by_range(access_token, user_email)
-        # context = { 'events': events['value'] }
-        context = { 'events': events['value'] }
-        return render(request, 'calender/events.html', context)
-
-def create_event_view(request):
-    access_token = get_access_token(request, request.build_absolute_uri(reverse('calender:gettoken')))
-    user_email = request.session['user_email']
-
-    if not access_token:
-        return HttpResponseRedirect(reverse('calender:home'))
-    else:
-        create_event_view = create_event(access_token, user_email)
-        c =  Context({'status_code' : create_event_view})
-        return render(request, 'calender/createEvents.html', c)
-
-def schedule(request):
-    return render(request, 'calender/calender.html')
-
-
-# def dashboard(request):
-#     return render(request, 'calender/dashboardTest.html')
 
 @login_required
 def dashboard_appointments(request):

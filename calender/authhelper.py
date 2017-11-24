@@ -1,6 +1,8 @@
+####################################################################################################################
+# Created by Daniel Ratnaras ITRS Group Ltd
+####################################################################################################################
+
 from urllib.parse import quote, urlencode
-import base64
-import json
 import time
 import requests
 import requests.auth

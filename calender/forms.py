@@ -1,8 +1,8 @@
+####################################################################################################################
+# Created by Daniel Ratnaras ITRS Group Ltd
+####################################################################################################################
+
 from django import forms
-from django.core.validators import validate_email
-from django.forms.models import fields_for_model
-# from models import Pattern
-# from calender.token import
 class ClientAppointmentForm (forms.Form):
     # name = forms.CharField(label = 'Name', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Name ...','name' : 'f1-first-name', 'class' : 'f1-first-name form-control', 'id' : 'f1-first-name'}))
     # email = forms.EmailField(label = 'Email', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Email ...','name' : 'f1-email', 'class' : 'f1-email form-control', 'id' : 'f1-email'}))

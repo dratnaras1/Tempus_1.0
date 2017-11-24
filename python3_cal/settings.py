@@ -89,23 +89,19 @@ MESSAGE_TAGS = {
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+
+#insert database details here
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'tempus',
-        'USER': 'user',
-        'PASSWORD': 'password',
+        'USER': 'root',
+        'PASSWORD': 'admin',
         }
 }
 
 
 
-# DATABASES = {
-#     'default' : {
-#         'ENGINE' : 'django_mongodb_engine',
-#         'NAME' : 'tempus_database'
-#     }
-# }
 
 
 # Password validation
@@ -148,24 +144,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Mail settings
-# EMAIL_HOST='outlook.hostedservice2.net'
-# EMAIL_HOST_USER='dratnaras@itrsgroup.com'
-# EMAIL_HOST_PASSWORD='MAthu2510'
-# EMAIL_USE_TLS= True
-
-# EMAIL_HOST='192.168.1.133'
-# EMAIL_HOST_USER='dratnaras'
-# EMAIL_HOST_PASSWORD='ipods'
-# EMAIL_PORT='25'
-# EMAIL_USE_TLS= True
-
-
 SECURE_SSL_REDIRECT= False
 
+# Mail settings
 EMAIL_HOST='smtp.office365.com'
-EMAIL_HOST_USER='dratnaras@itrsgroup.onmicrosoft.com'
-EMAIL_HOST_PASSWORD='MAthu2510'
+EMAIL_HOST_USER=''
+EMAIL_HOST_PASSWORD=''
 EMAIL_PORT='587'
 EMAIL_USE_TLS= True
 

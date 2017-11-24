@@ -1,11 +1,11 @@
-from django.test import TestCase
+####################################################################################################################
+# Created by Daniel Ratnaras ITRS Group Ltd
+####################################################################################################################
+
 from calender.models import OutlookAuth
 from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import AnonymousUser, User
-import requests
 from django.test.client import RequestFactory
-from django.core.urlresolvers import reverse
-from calender.views import dashboard
 from django.test import Client
 
 # Create your tests here.

@@ -1,9 +1,11 @@
+####################################################################################################################
+# Created by Daniel Ratnaras ITRS Group Ltd
+####################################################################################################################
+
 from calender.models import OutlookAuth
 from django.http import Http404
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseRedirect
+
 
 def getUser(request):
     try:
